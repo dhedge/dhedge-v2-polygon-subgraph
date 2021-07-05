@@ -1,0 +1,74 @@
+specVersion: 0.0.1
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: PoolFactory
+    network: mainnet
+    source:
+      address: "0x4e86b7555dB05FEA5A5bc1f9d2e9Df3EAc3E5112"
+      abi: PoolFactory
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.2
+      language: wasm/assemblyscript
+      entities:
+        - DaoAddressSet
+        - DaoFeeSet
+        - ExitCooldownSet
+        - ExitFeeSet
+        - FundCreated
+        - LogUpgrade
+        - MaximumSupportedAssetCountSet
+        - OwnershipTransferred
+        - Paused
+        - ProxyCreated
+        - SetAssetGuard
+        - SetAssetHandler
+        - SetContractGuard
+        - SetMaximumManagerFee
+        - SetMaximumManagerFeeNumeratorChange
+        - SetPoolManagerFee
+        - SetTrackingCode
+        - Unpaused
+      abis:
+        - name: PoolFactory
+          file: ./abis/PoolFactory.json
+      eventHandlers:
+        - event: DaoAddressSet(address)
+          handler: handleDaoAddressSet
+        - event: DaoFeeSet(uint256,uint256)
+          handler: handleDaoFeeSet
+        - event: ExitCooldownSet(uint256)
+          handler: handleExitCooldownSet
+        - event: ExitFeeSet(uint256,uint256)
+          handler: handleExitFeeSet
+        - event: FundCreated(address,bool,string,string,address,uint256,uint256,uint256)
+          handler: handleFundCreated
+        - event: LogUpgrade(indexed address,indexed address)
+          handler: handleLogUpgrade
+        - event: MaximumSupportedAssetCountSet(uint256)
+          handler: handleMaximumSupportedAssetCountSet
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: Paused(address)
+          handler: handlePaused
+        - event: ProxyCreated(address)
+          handler: handleProxyCreated
+        - event: SetAssetGuard(uint8,address)
+          handler: handleSetAssetGuard
+        - event: SetAssetHandler(address)
+          handler: handleSetAssetHandler
+        - event: SetContractGuard(address,address)
+          handler: handleSetContractGuard
+        - event: SetMaximumManagerFee(uint256,uint256)
+          handler: handleSetMaximumManagerFee
+        - event: SetMaximumManagerFeeNumeratorChange(uint256)
+          handler: handleSetMaximumManagerFeeNumeratorChange
+        - event: SetPoolManagerFee(uint256,uint256)
+          handler: handleSetPoolManagerFee
+        - event: SetTrackingCode(bytes32)
+          handler: handleSetTrackingCode
+        - event: Unpaused(address)
+          handler: handleUnpaused
+      file: ./src/mapping.ts
