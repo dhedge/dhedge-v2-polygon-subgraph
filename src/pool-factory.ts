@@ -9,13 +9,6 @@ import {
   OwnershipTransferred as OwnershipTransferredEvent,
   Paused as PausedEvent,
   ProxyCreated as ProxyCreatedEvent,
-  SetAssetGuard as SetAssetGuardEvent,
-  SetAssetHandler as SetAssetHandlerEvent,
-  SetContractGuard as SetContractGuardEvent,
-  SetMaximumManagerFee as SetMaximumManagerFeeEvent,
-  SetMaximumManagerFeeNumeratorChange as SetMaximumManagerFeeNumeratorChangeEvent,
-  SetPoolManagerFee as SetPoolManagerFeeEvent,
-  SetTrackingCode as SetTrackingCodeEvent,
   Unpaused as UnpausedEvent
 } from "../generated/PoolFactory/PoolFactory"
 import {
@@ -29,13 +22,6 @@ import {
   OwnershipTransferred,
   Paused,
   ProxyCreated,
-  SetAssetGuard,
-  SetAssetHandler,
-  SetContractGuard,
-  SetMaximumManagerFee,
-  SetMaximumManagerFeeNumeratorChange,
-  SetPoolManagerFee,
-  SetTrackingCode,
   Unpaused
 } from "../generated/schema"
 
@@ -134,69 +120,69 @@ export function handleProxyCreated(event: ProxyCreatedEvent): void {
   entity.save()
 }
 
-export function handleSetAssetGuard(event: SetAssetGuardEvent): void {
-  let entity = new SetAssetGuard(
-    event.transaction.hash.toHex() + "-" + event.logIndex.toString()
-  )
-  entity.assetType = event.params.assetType
-  entity.guardAddress = event.params.guardAddress
-  entity.save()
-}
+// export function handleSetAssetGuard(event: SetAssetGuardEvent): void {
+//   let entity = new SetAssetGuard(
+//     event.transaction.hash.toHex() + "-" + event.logIndex.toString()
+//   )
+//   entity.assetType = event.params.assetType
+//   entity.guardAddress = event.params.guardAddress
+//   entity.save()
+// }
 
-export function handleSetAssetHandler(event: SetAssetHandlerEvent): void {
-  let entity = new SetAssetHandler(
-    event.transaction.hash.toHex() + "-" + event.logIndex.toString()
-  )
-  entity.assetHandler = event.params.assetHandler
-  entity.save()
-}
+// export function handleSetAssetHandler(event: SetAssetHandlerEvent): void {
+//   let entity = new SetAssetHandler(
+//     event.transaction.hash.toHex() + "-" + event.logIndex.toString()
+//   )
+//   entity.assetHandler = event.params.assetHandler
+//   entity.save()
+// }
 
-export function handleSetContractGuard(event: SetContractGuardEvent): void {
-  let entity = new SetContractGuard(
-    event.transaction.hash.toHex() + "-" + event.logIndex.toString()
-  )
-  entity.extContract = event.params.extContract
-  entity.guardAddress = event.params.guardAddress
-  entity.save()
-}
+// export function handleSetContractGuard(event: SetContractGuardEvent): void {
+//   let entity = new SetContractGuard(
+//     event.transaction.hash.toHex() + "-" + event.logIndex.toString()
+//   )
+//   entity.extContract = event.params.extContract
+//   entity.guardAddress = event.params.guardAddress
+//   entity.save()
+// }
 
-export function handleSetMaximumManagerFee(
-  event: SetMaximumManagerFeeEvent
-): void {
-  let entity = new SetMaximumManagerFee(
-    event.transaction.hash.toHex() + "-" + event.logIndex.toString()
-  )
-  entity.numerator = event.params.numerator
-  entity.denominator = event.params.denominator
-  entity.save()
-}
+// export function handleSetMaximumManagerFee(
+//   event: SetMaximumManagerFeeEvent
+// ): void {
+//   let entity = new SetMaximumManagerFee(
+//     event.transaction.hash.toHex() + "-" + event.logIndex.toString()
+//   )
+//   entity.numerator = event.params.numerator
+//   entity.denominator = event.params.denominator
+//   entity.save()
+// }
 
-export function handleSetMaximumManagerFeeNumeratorChange(
-  event: SetMaximumManagerFeeNumeratorChangeEvent
-): void {
-  let entity = new SetMaximumManagerFeeNumeratorChange(
-    event.transaction.hash.toHex() + "-" + event.logIndex.toString()
-  )
-  entity.amount = event.params.amount
-  entity.save()
-}
+// export function handleSetMaximumManagerFeeNumeratorChange(
+//   event: SetMaximumManagerFeeNumeratorChangeEvent
+// ): void {
+//   let entity = new SetMaximumManagerFeeNumeratorChange(
+//     event.transaction.hash.toHex() + "-" + event.logIndex.toString()
+//   )
+//   entity.amount = event.params.amount
+//   entity.save()
+// }
 
-export function handleSetPoolManagerFee(event: SetPoolManagerFeeEvent): void {
-  let entity = new SetPoolManagerFee(
-    event.transaction.hash.toHex() + "-" + event.logIndex.toString()
-  )
-  entity.numerator = event.params.numerator
-  entity.denominator = event.params.denominator
-  entity.save()
-}
+// export function handleSetPoolManagerFee(event: SetPoolManagerFeeEvent): void {
+//   let entity = new SetPoolManagerFee(
+//     event.transaction.hash.toHex() + "-" + event.logIndex.toString()
+//   )
+//   entity.numerator = event.params.numerator
+//   entity.denominator = event.params.denominator
+//   entity.save()
+// }
 
-export function handleSetTrackingCode(event: SetTrackingCodeEvent): void {
-  let entity = new SetTrackingCode(
-    event.transaction.hash.toHex() + "-" + event.logIndex.toString()
-  )
-  entity.code = event.params.code
-  entity.save()
-}
+// export function handleSetTrackingCode(event: SetTrackingCodeEvent): void {
+//   let entity = new SetTrackingCode(
+//     event.transaction.hash.toHex() + "-" + event.logIndex.toString()
+//   )
+//   entity.code = event.params.code
+//   entity.save()
+// }
 
 export function handleUnpaused(event: UnpausedEvent): void {
   let entity = new Unpaused(
