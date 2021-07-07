@@ -520,6 +520,331 @@ export class ProxyCreated extends Entity {
   }
 }
 
+export class SetAssetGuard extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save SetAssetGuard entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save SetAssetGuard entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("SetAssetGuard", id.toString(), this);
+  }
+
+  static load(id: string): SetAssetGuard | null {
+    return store.get("SetAssetGuard", id) as SetAssetGuard | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get assetType(): i32 {
+    let value = this.get("assetType");
+    return value.toI32();
+  }
+
+  set assetType(value: i32) {
+    this.set("assetType", Value.fromI32(value));
+  }
+
+  get guardAddress(): Bytes {
+    let value = this.get("guardAddress");
+    return value.toBytes();
+  }
+
+  set guardAddress(value: Bytes) {
+    this.set("guardAddress", Value.fromBytes(value));
+  }
+}
+
+export class SetAssetHandler extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save SetAssetHandler entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save SetAssetHandler entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("SetAssetHandler", id.toString(), this);
+  }
+
+  static load(id: string): SetAssetHandler | null {
+    return store.get("SetAssetHandler", id) as SetAssetHandler | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get assetHandler(): Bytes {
+    let value = this.get("assetHandler");
+    return value.toBytes();
+  }
+
+  set assetHandler(value: Bytes) {
+    this.set("assetHandler", Value.fromBytes(value));
+  }
+}
+
+export class SetContractGuard extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save SetContractGuard entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save SetContractGuard entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("SetContractGuard", id.toString(), this);
+  }
+
+  static load(id: string): SetContractGuard | null {
+    return store.get("SetContractGuard", id) as SetContractGuard | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get extContract(): Bytes {
+    let value = this.get("extContract");
+    return value.toBytes();
+  }
+
+  set extContract(value: Bytes) {
+    this.set("extContract", Value.fromBytes(value));
+  }
+
+  get guardAddress(): Bytes {
+    let value = this.get("guardAddress");
+    return value.toBytes();
+  }
+
+  set guardAddress(value: Bytes) {
+    this.set("guardAddress", Value.fromBytes(value));
+  }
+}
+
+export class SetMaximumManagerFee extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(
+      id !== null,
+      "Cannot save SetMaximumManagerFee entity without an ID"
+    );
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save SetMaximumManagerFee entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("SetMaximumManagerFee", id.toString(), this);
+  }
+
+  static load(id: string): SetMaximumManagerFee | null {
+    return store.get("SetMaximumManagerFee", id) as SetMaximumManagerFee | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get numerator(): BigInt {
+    let value = this.get("numerator");
+    return value.toBigInt();
+  }
+
+  set numerator(value: BigInt) {
+    this.set("numerator", Value.fromBigInt(value));
+  }
+
+  get denominator(): BigInt {
+    let value = this.get("denominator");
+    return value.toBigInt();
+  }
+
+  set denominator(value: BigInt) {
+    this.set("denominator", Value.fromBigInt(value));
+  }
+}
+
+export class SetMaximumManagerFeeNumeratorChange extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(
+      id !== null,
+      "Cannot save SetMaximumManagerFeeNumeratorChange entity without an ID"
+    );
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save SetMaximumManagerFeeNumeratorChange entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("SetMaximumManagerFeeNumeratorChange", id.toString(), this);
+  }
+
+  static load(id: string): SetMaximumManagerFeeNumeratorChange | null {
+    return store.get(
+      "SetMaximumManagerFeeNumeratorChange",
+      id
+    ) as SetMaximumManagerFeeNumeratorChange | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get amount(): BigInt {
+    let value = this.get("amount");
+    return value.toBigInt();
+  }
+
+  set amount(value: BigInt) {
+    this.set("amount", Value.fromBigInt(value));
+  }
+}
+
+export class SetPoolManagerFee extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save SetPoolManagerFee entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save SetPoolManagerFee entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("SetPoolManagerFee", id.toString(), this);
+  }
+
+  static load(id: string): SetPoolManagerFee | null {
+    return store.get("SetPoolManagerFee", id) as SetPoolManagerFee | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get numerator(): BigInt {
+    let value = this.get("numerator");
+    return value.toBigInt();
+  }
+
+  set numerator(value: BigInt) {
+    this.set("numerator", Value.fromBigInt(value));
+  }
+
+  get denominator(): BigInt {
+    let value = this.get("denominator");
+    return value.toBigInt();
+  }
+
+  set denominator(value: BigInt) {
+    this.set("denominator", Value.fromBigInt(value));
+  }
+}
+
+export class SetTrackingCode extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save SetTrackingCode entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save SetTrackingCode entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("SetTrackingCode", id.toString(), this);
+  }
+
+  static load(id: string): SetTrackingCode | null {
+    return store.get("SetTrackingCode", id) as SetTrackingCode | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get code(): Bytes {
+    let value = this.get("code");
+    return value.toBytes();
+  }
+
+  set code(value: Bytes) {
+    this.set("code", Value.fromBytes(value));
+  }
+}
+
 export class Unpaused extends Entity {
   constructor(id: string) {
     super();

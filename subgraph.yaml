@@ -24,6 +24,13 @@ dataSources:
         - OwnershipTransferred
         - Paused
         - ProxyCreated
+        - SetAssetGuard
+        - SetAssetHandler
+        - SetContractGuard
+        - SetMaximumManagerFee
+        - SetMaximumManagerFeeNumeratorChange
+        - SetPoolManagerFee
+        - SetTrackingCode
         - Unpaused
       abis:
         - name: PoolFactory
@@ -53,6 +60,20 @@ dataSources:
           handler: handlePaused
         - event: ProxyCreated(address)
           handler: handleProxyCreated
+        - event: SetAssetGuard(uint8,address)
+          handler: handleSetAssetGuard
+        - event: SetAssetHandler(address)
+          handler: handleSetAssetHandler
+        - event: SetContractGuard(address,address)
+          handler: handleSetContractGuard
+        - event: SetMaximumManagerFee(uint256,uint256)
+          handler: handleSetMaximumManagerFee
+        - event: SetMaximumManagerFeeNumeratorChange(uint256)
+          handler: handleSetMaximumManagerFeeNumeratorChange
+        - event: SetPoolManagerFee(uint256,uint256)
+          handler: handleSetPoolManagerFee
+        - event: SetTrackingCode(bytes32)
+          handler: handleSetTrackingCode
         - event: Unpaused(address)
           handler: handleUnpaused
       file: ./src/pool-factory.ts

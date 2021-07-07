@@ -234,6 +234,148 @@ export class ProxyCreated__Params {
   }
 }
 
+export class SetAssetGuard extends ethereum.Event {
+  get params(): SetAssetGuard__Params {
+    return new SetAssetGuard__Params(this);
+  }
+}
+
+export class SetAssetGuard__Params {
+  _event: SetAssetGuard;
+
+  constructor(event: SetAssetGuard) {
+    this._event = event;
+  }
+
+  get assetType(): i32 {
+    return this._event.parameters[0].value.toI32();
+  }
+
+  get guardAddress(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+}
+
+export class SetAssetHandler extends ethereum.Event {
+  get params(): SetAssetHandler__Params {
+    return new SetAssetHandler__Params(this);
+  }
+}
+
+export class SetAssetHandler__Params {
+  _event: SetAssetHandler;
+
+  constructor(event: SetAssetHandler) {
+    this._event = event;
+  }
+
+  get assetHandler(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+}
+
+export class SetContractGuard extends ethereum.Event {
+  get params(): SetContractGuard__Params {
+    return new SetContractGuard__Params(this);
+  }
+}
+
+export class SetContractGuard__Params {
+  _event: SetContractGuard;
+
+  constructor(event: SetContractGuard) {
+    this._event = event;
+  }
+
+  get extContract(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get guardAddress(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+}
+
+export class SetMaximumManagerFee extends ethereum.Event {
+  get params(): SetMaximumManagerFee__Params {
+    return new SetMaximumManagerFee__Params(this);
+  }
+}
+
+export class SetMaximumManagerFee__Params {
+  _event: SetMaximumManagerFee;
+
+  constructor(event: SetMaximumManagerFee) {
+    this._event = event;
+  }
+
+  get numerator(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+
+  get denominator(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
+  }
+}
+
+export class SetMaximumManagerFeeNumeratorChange extends ethereum.Event {
+  get params(): SetMaximumManagerFeeNumeratorChange__Params {
+    return new SetMaximumManagerFeeNumeratorChange__Params(this);
+  }
+}
+
+export class SetMaximumManagerFeeNumeratorChange__Params {
+  _event: SetMaximumManagerFeeNumeratorChange;
+
+  constructor(event: SetMaximumManagerFeeNumeratorChange) {
+    this._event = event;
+  }
+
+  get amount(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+}
+
+export class SetPoolManagerFee extends ethereum.Event {
+  get params(): SetPoolManagerFee__Params {
+    return new SetPoolManagerFee__Params(this);
+  }
+}
+
+export class SetPoolManagerFee__Params {
+  _event: SetPoolManagerFee;
+
+  constructor(event: SetPoolManagerFee) {
+    this._event = event;
+  }
+
+  get numerator(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+
+  get denominator(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
+  }
+}
+
+export class SetTrackingCode extends ethereum.Event {
+  get params(): SetTrackingCode__Params {
+    return new SetTrackingCode__Params(this);
+  }
+}
+
+export class SetTrackingCode__Params {
+  _event: SetTrackingCode;
+
+  constructor(event: SetTrackingCode) {
+    this._event = event;
+  }
+
+  get code(): Bytes {
+    return this._event.parameters[0].value.toBytes();
+  }
+}
+
 export class Unpaused extends ethereum.Event {
   get params(): Unpaused__Params {
     return new Unpaused__Params(this);
