@@ -1,7 +1,10 @@
-import { log, Address, BigInt, BigDecimal } from '@graphprotocol/graph-ts';
+import { log, Address, BigInt, BigDecimal, ethereum } from '@graphprotocol/graph-ts';
 
 import { ERC20 } from '../generated/PoolFactory/ERC20';
 import { ERC20NameBytes } from '../generated/PoolFactory/ERC20NameBytes';
+import { PoolLogic} from '../generated/templates/PoolLogic/PoolLogic';
+import { PoolManagerLogic } from '../generated/templates/PoolLogic/PoolManagerLogic';
+import { Pool, Asset } from "../generated/schema";
 
 export let ZERO_BI = BigInt.fromI32(0)
 export let ONE_BI = BigInt.fromI32(1)
@@ -58,4 +61,59 @@ export function fetchTokenName(tokenAddress: Address): string {
 
 export function isNullEthValue(value: string): boolean {
   return value == '0x0000000000000000000000000000000000000000000000000000000000000001'
+}
+
+export function instantiatePool(id: string, fundAddress: Address, event: ethereum.Event): Pool {
+  let pool = Pool.load(id);
+  let poolContract = PoolLogic.bind(fundAddress);
+  let poolTokenDecimals = fetchTokenDecimals(fundAddress);
+
+  if (!pool) {
+    pool = new Pool(id);
+    pool.fundAddress = fundAddress;
+  }
+
+  // Manager Logic
+  let managerAddress = poolContract.poolManagerLogic();
+  let managerContract = PoolManagerLogic.bind(managerAddress);
+
+  // Pool Entity
+  let tryPoolName = poolContract.try_name()
+  if (tryPoolName.reverted) {
+    log.info(
+      'pool name was reverted in tx hash: {} at blockNumber: {}', 
+      [event.transaction.hash.toHex(), event.block.number.toString()]
+    );
+  }
+  let poolName = tryPoolName.value;
+  pool.name = poolName;
+  pool.manager = managerContract.manager();
+  pool.managerName = poolContract.managerName();
+  pool.decimals = poolTokenDecimals;
+
+  let poolSupply = convertTokenToDecimal(poolContract.totalSupply(), poolTokenDecimals);
+  pool.totalSupply = poolSupply;
+
+  if (pool === null) log.error('pool is null', [pool.id])
+  return pool as Pool;
+}
+
+export function instantiateAsset(pool: Pool, assetAddress: Address, event: ethereum.Event): Asset {
+  let asset = Asset.load(pool.fundAddress.toHexString() + "-" + assetAddress.toHexString());
+  if (!asset) {
+    asset = new Asset(pool.fundAddress.toHexString() + "-" + assetAddress.toHexString())
+    asset.pool = pool.id
+  }
+  let decimals = fetchTokenDecimals(assetAddress);
+  let erc20 = ERC20.bind(assetAddress);
+
+  // get updated balance of ERC20 at time of event
+  let balance = convertTokenToDecimal(erc20.balanceOf(pool.fundAddress as Address), decimals);
+
+  asset.time = event.block.timestamp.toI32() 
+  asset.block = event.block.number.toI32()
+  asset.name = fetchTokenName(assetAddress)
+  asset.balance = balance; 
+  asset.decimals = decimals;
+  return asset as Asset;
 }
