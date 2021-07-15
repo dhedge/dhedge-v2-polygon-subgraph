@@ -15,6 +15,8 @@ import {
   fetchTokenDecimals,
   convertTokenToDecimal,
   fetchTokenName,
+  instantiatePool,
+  instantiateAsset,
 } from "../src/helpers";
 import { PoolManagerLogic } from '../generated/templates/PoolLogic/PoolManagerLogic';
 import {
@@ -28,7 +30,7 @@ import {
   Withdrawal,
   Pool,
   Asset,
-  AssetsWithdrawn
+  AssetsWithdrawn,
 } from '../generated/schema';
 import { dataSource, log, Address } from '@graphprotocol/graph-ts';
 
@@ -46,85 +48,22 @@ export function handleDeposit(event: DepositEvent): void {
   let entity = new Deposit(
     event.transaction.hash.toHex() + '-' + event.logIndex.toString()
   );
-
   let id = dataSource.address().toHexString();
-  log.info(
-    'logging id from dataSource in handleDeposit at block number: {}',
-    [id, event.block.number.toString()]
-  );
-
-  let poolTokenDecimals = fetchTokenDecimals(event.address);
+  let pool = instantiatePool(id, event.params.fundAddress, event);
+  pool.save();
   
-  // Manager Logic
-  let poolContract = PoolLogic.bind(event.address);
-  let managerAddress = poolContract.poolManagerLogic();
-  let managerContract = PoolManagerLogic.bind(managerAddress);
-  
-  let pool = Pool.load(id);
-  if (!pool) {
-    pool = new Pool(id);
-    pool.fundAddress = event.params.fundAddress;
-  }
-
-  // let tryAssetBalance = managerContract.try_assetBalance(event.params.assetDeposited);
-  // if (tryAssetBalance.reverted) {
-  //   log.info(
-  //     'assetBalance was reverted in tx hash {} at block number: {}',
-  //     [event.transaction.hash.toHex(), event.block.number.toString()]
-  //   );
-  //   return;
-  // }
-  // let assetValue = managerContract.assetValue(event.params.assetDeposited, event.params.valueDeposited);
-  
-  // Create or Load Asset entity
-  let asset = Asset.load(event.address.toHexString() + "-" + event.params.assetDeposited.toHexString());
-  if (!asset) {
-    asset = new Asset(event.address.toHexString() + "-" + event.params.assetDeposited.toHexString());
-    asset.pool = pool.id
-  }
-
-  let decimals = fetchTokenDecimals(event.params.assetDeposited);
-  let erc20Contract = ERC20.bind(event.params.assetDeposited);
-  let fundAddress = Address.fromString(event.params.fundAddress.toHexString());
-  
-  let currentFormattedBalance = convertTokenToDecimal(erc20Contract.balanceOf(fundAddress), decimals);
-
-  asset.time = event.block.timestamp.toI32()
-  asset.block = event.block.number.toI32()
-  asset.name = fetchTokenName(event.params.assetDeposited)
-  asset.balance = currentFormattedBalance; 
-  // asset.value = assetValue;
-  asset.decimals = decimals;
+  // load of create asset & update Pool's balance for asset
+  let asset = instantiateAsset(pool, event.params.assetDeposited, event);
   asset.save();
 
-  // Pool Entity
-  let tryPoolName = poolContract.try_name()
-  if (tryPoolName.reverted) {
-    log.info(
-      'pool name was reverted in tx hash: {} at blockNumber: {}', 
-      [event.transaction.hash.toHex(), event.block.number.toString()]
-    );
-    return;
-  }
-  let poolName = tryPoolName.value;
-  pool.name = poolName;
-  pool.manager = managerAddress
-  pool.manager = managerContract.manager();
-  pool.managerName = poolContract.managerName();
-
-  let poolSupply = convertTokenToDecimal(poolContract.totalSupply(), poolTokenDecimals);
-  pool.totalSupply = poolSupply;
-  pool.save();
-
-  // Deposit Entity
   entity.pool = pool.id;
   entity.fundAddress = event.params.fundAddress;
-  entity.totalSupply = convertTokenToDecimal(poolContract.totalSupply(), poolTokenDecimals);
+  entity.totalSupply = pool.totalSupply;
   entity.investor = event.params.investor;
   entity.assetDeposited = event.params.assetDeposited;
   entity.valueDeposited = event.params.valueDeposited;
-  entity.fundTokensReceived = convertTokenToDecimal(event.params.fundTokensReceived, poolTokenDecimals);
-  entity.totalInvestorFundTokens = convertTokenToDecimal(event.params.totalInvestorFundTokens, poolTokenDecimals);
+  entity.fundTokensReceived = event.params.fundTokensReceived;
+  entity.totalInvestorFundTokens = event.params.totalInvestorFundTokens;
   entity.fundValue = event.params.fundValue;
   entity.time = event.params.time;
   entity.block = event.block.number.toI32()
@@ -191,36 +130,7 @@ export function handleWithdrawal(event: WithdrawalEvent): void {
     event.transaction.hash.toHex() + '-' + event.logIndex.toString()
   );
   let id = dataSource.address().toHexString();
-
-  let poolContract = PoolLogic.bind(event.address);
-  let poolTokenDecimals = fetchTokenDecimals(event.address);
-
-  // Manager Logic
-  let managerAddress = poolContract.poolManagerLogic();
-  let managerContract = PoolManagerLogic.bind(managerAddress);
-
-  let pool = Pool.load(id);
-  if (!pool) {
-    pool = new Pool(id);
-    pool.fundAddress = event.params.fundAddress;
-  }
-
-  let tryPoolName = poolContract.try_name()
-  if (tryPoolName.reverted) {
-    log.info(
-      'pool name was reverted in tx hash: {} at blockNumber: {}', 
-      [event.transaction.hash.toHex(), event.block.number.toString()]
-    );
-    return;
-  }
-  let poolName = tryPoolName.value;
-  pool.name = poolName;
-  pool.manager = managerContract.manager();
-  pool.managerName = poolContract.managerName();
-  
-  let poolSupply = convertTokenToDecimal(poolContract.totalSupply(), poolTokenDecimals);
-  pool.totalSupply = poolSupply;
-
+  let pool = instantiatePool(id, event.params.fundAddress, event);
   pool.save();
 
   let withdrawnAssetsTuple = event.params.withdrawnAssets as Array<WithdrawalWithdrawnAssetsStruct>;
@@ -241,21 +151,29 @@ export function handleWithdrawal(event: WithdrawalEvent): void {
     withdrawnAssets.save();
 
     // load the matched Asset with withdrawn asset
-    let asset = Asset.load(event.address.toHexString() + "-" + blockData.asset.toHexString());
-    let newBalance = asset.balance.minus(tokenAmountWithdrawn);
-    asset.balance = newBalance;
-    asset.block = event.block.number.toI32();
-    asset.time = event.block.timestamp.toI32();
-    asset.save();
+    // this part is causing a break
+    // let asset = Asset.load(event.address.toHexString() + "-" + blockData.asset.toHexString());
+    // if (!asset) {
+    //   asset = new Asset(event.address.toHexString() + "-" + blockData.asset.toHexString());
+    //   asset.pool = pool.id
+    // }
+    // let newBalance = asset.balance.minus(tokenAmountWithdrawn);
+    // asset.pool = pool.id
+    // asset.name = fetchTokenName(blockData.asset);
+    // asset.balance = newBalance;
+    // asset.block = event.block.number.toI32();
+    // asset.time = event.block.timestamp.toI32();
+    // asset.decimals = decimals;
+    // asset.save();
   };
 
   entity.pool = pool.id;
   entity.fundAddress = event.params.fundAddress;
-  entity.totalSupply = poolSupply;
+  entity.totalSupply = pool.totalSupply;
   entity.investor = event.params.investor;
   entity.valueWithdrawn = event.params.valueWithdrawn;
-  entity.fundTokensWithdrawn = convertTokenToDecimal(event.params.fundTokensWithdrawn, poolTokenDecimals);
-  entity.totalInvestorFundTokens = convertTokenToDecimal(event.params.totalInvestorFundTokens, poolTokenDecimals);
+  entity.fundTokensWithdrawn = event.params.fundTokensWithdrawn;
+  entity.totalInvestorFundTokens = event.params.totalInvestorFundTokens;
   entity.fundValue = event.params.fundValue;
   entity.time = event.params.time;
   entity.block = event.block.number.toI32();
