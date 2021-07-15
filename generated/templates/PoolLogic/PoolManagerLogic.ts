@@ -64,10 +64,6 @@ export class AssetRemoved__Params {
   get asset(): Address {
     return this._event.parameters[2].value.toAddress();
   }
-
-  get isDeposit(): boolean {
-    return this._event.parameters[3].value.toBoolean();
-  }
 }
 
 export class ManagerFeeIncreaseAnnounced extends ethereum.Event {
@@ -338,6 +334,27 @@ export class PoolManagerLogic extends ethereum.SmartContract {
     let result = super.tryCall(
       "assetBalance",
       "assetBalance(address):(uint256)",
+      [ethereum.Value.fromAddress(asset)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  assetDecimal(asset: Address): BigInt {
+    let result = super.call("assetDecimal", "assetDecimal(address):(uint256)", [
+      ethereum.Value.fromAddress(asset)
+    ]);
+
+    return result[0].toBigInt();
+  }
+
+  try_assetDecimal(asset: Address): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "assetDecimal",
+      "assetDecimal(address):(uint256)",
       [ethereum.Value.fromAddress(asset)]
     );
     if (result.reverted) {
@@ -967,10 +984,8 @@ export class ChangeAssetsCall__Inputs {
     >();
   }
 
-  get _removeAssets(): Array<ChangeAssetsCall_removeAssetsStruct> {
-    return this._call.inputValues[1].value.toTupleArray<
-      ChangeAssetsCall_removeAssetsStruct
-    >();
+  get _removeAssets(): Array<Address> {
+    return this._call.inputValues[1].value.toAddressArray();
   }
 }
 
@@ -983,16 +998,6 @@ export class ChangeAssetsCall__Outputs {
 }
 
 export class ChangeAssetsCall_addAssetsStruct extends ethereum.Tuple {
-  get asset(): Address {
-    return this[0].toAddress();
-  }
-
-  get isDeposit(): boolean {
-    return this[1].toBoolean();
-  }
-}
-
-export class ChangeAssetsCall_removeAssetsStruct extends ethereum.Tuple {
   get asset(): Address {
     return this[0].toAddress();
   }

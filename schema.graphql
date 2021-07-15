@@ -1,6 +1,6 @@
 type DaoAddressSet @entity {
   id: ID!
-  dao: Bytes!
+  daoAddress: Bytes!
 }
 
 type DaoFeeSet @entity {
@@ -59,21 +59,9 @@ type ProxyCreated @entity {
   proxy: Bytes!
 }
 
-type SetAssetGuard @entity {
-  id: ID!
-  assetType: Int! # uint8
-  guardAddress: Bytes! # address
-}
-
 type SetAssetHandler @entity {
   id: ID!
   assetHandler: Bytes! # address
-}
-
-type SetContractGuard @entity {
-  id: ID!
-  extContract: Bytes! # address
-  guardAddress: Bytes! # address
 }
 
 type SetMaximumManagerFee @entity {

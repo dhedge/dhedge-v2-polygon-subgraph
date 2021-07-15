@@ -10,20 +10,20 @@ import {
   BigInt
 } from "@graphprotocol/graph-ts";
 
-export class DaoAddressSet extends ethereum.Event {
-  get params(): DaoAddressSet__Params {
-    return new DaoAddressSet__Params(this);
+export class DAOAddressSet extends ethereum.Event {
+  get params(): DAOAddressSet__Params {
+    return new DAOAddressSet__Params(this);
   }
 }
 
-export class DaoAddressSet__Params {
-  _event: DaoAddressSet;
+export class DAOAddressSet__Params {
+  _event: DAOAddressSet;
 
-  constructor(event: DaoAddressSet) {
+  constructor(event: DAOAddressSet) {
     this._event = event;
   }
 
-  get dao(): Address {
+  get daoAddress(): Address {
     return this._event.parameters[0].value.toAddress();
   }
 }
@@ -136,6 +136,24 @@ export class FundCreated__Params {
   }
 }
 
+export class GovernanceAddressSet extends ethereum.Event {
+  get params(): GovernanceAddressSet__Params {
+    return new GovernanceAddressSet__Params(this);
+  }
+}
+
+export class GovernanceAddressSet__Params {
+  _event: GovernanceAddressSet;
+
+  constructor(event: GovernanceAddressSet) {
+    this._event = event;
+  }
+
+  get governanceAddress(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+}
+
 export class LogUpgrade extends ethereum.Event {
   get params(): LogUpgrade__Params {
     return new LogUpgrade__Params(this);
@@ -234,28 +252,6 @@ export class ProxyCreated__Params {
   }
 }
 
-export class SetAssetGuard extends ethereum.Event {
-  get params(): SetAssetGuard__Params {
-    return new SetAssetGuard__Params(this);
-  }
-}
-
-export class SetAssetGuard__Params {
-  _event: SetAssetGuard;
-
-  constructor(event: SetAssetGuard) {
-    this._event = event;
-  }
-
-  get assetType(): i32 {
-    return this._event.parameters[0].value.toI32();
-  }
-
-  get guardAddress(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-}
-
 export class SetAssetHandler extends ethereum.Event {
   get params(): SetAssetHandler__Params {
     return new SetAssetHandler__Params(this);
@@ -271,28 +267,6 @@ export class SetAssetHandler__Params {
 
   get assetHandler(): Address {
     return this._event.parameters[0].value.toAddress();
-  }
-}
-
-export class SetContractGuard extends ethereum.Event {
-  get params(): SetContractGuard__Params {
-    return new SetContractGuard__Params(this);
-  }
-}
-
-export class SetContractGuard__Params {
-  _event: SetContractGuard;
-
-  constructor(event: SetContractGuard) {
-    this._event = event;
-  }
-
-  get extContract(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get guardAddress(): Address {
-    return this._event.parameters[1].value.toAddress();
   }
 }
 
@@ -515,6 +489,21 @@ export class PoolFactory extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
+  daoAddress(): Address {
+    let result = super.call("daoAddress", "daoAddress():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_daoAddress(): ethereum.CallResult<Address> {
+    let result = super.tryCall("daoAddress", "daoAddress():(address)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
   deploy(_data: Bytes, _proxyType: i32): Address {
     let result = super.call("deploy", "deploy(bytes,uint8):(address)", [
       ethereum.Value.fromBytes(_data),
@@ -551,6 +540,48 @@ export class PoolFactory extends ethereum.SmartContract {
       "deployedFunds",
       "deployedFunds(uint256):(address)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
+  getAddress(name: Bytes): Address {
+    let result = super.call("getAddress", "getAddress(bytes32):(address)", [
+      ethereum.Value.fromFixedBytes(name)
+    ]);
+
+    return result[0].toAddress();
+  }
+
+  try_getAddress(name: Bytes): ethereum.CallResult<Address> {
+    let result = super.tryCall("getAddress", "getAddress(bytes32):(address)", [
+      ethereum.Value.fromFixedBytes(name)
+    ]);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
+  getAssetGuard(extContract: Address): Address {
+    let result = super.call(
+      "getAssetGuard",
+      "getAssetGuard(address):(address)",
+      [ethereum.Value.fromAddress(extContract)]
+    );
+
+    return result[0].toAddress();
+  }
+
+  try_getAssetGuard(extContract: Address): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "getAssetGuard",
+      "getAssetGuard(address):(address)",
+      [ethereum.Value.fromAddress(extContract)]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -606,7 +637,7 @@ export class PoolFactory extends ethereum.SmartContract {
   }
 
   getAssetType(asset: Address): i32 {
-    let result = super.call("getAssetType", "getAssetType(address):(uint8)", [
+    let result = super.call("getAssetType", "getAssetType(address):(uint16)", [
       ethereum.Value.fromAddress(asset)
     ]);
 
@@ -616,7 +647,7 @@ export class PoolFactory extends ethereum.SmartContract {
   try_getAssetType(asset: Address): ethereum.CallResult<i32> {
     let result = super.tryCall(
       "getAssetType",
-      "getAssetType(address):(uint8)",
+      "getAssetType(address):(uint16)",
       [ethereum.Value.fromAddress(asset)]
     );
     if (result.reverted) {
@@ -624,25 +655,6 @@ export class PoolFactory extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toI32());
-  }
-
-  getDaoAddress(): Address {
-    let result = super.call("getDaoAddress", "getDaoAddress():(address)", []);
-
-    return result[0].toAddress();
-  }
-
-  try_getDaoAddress(): ethereum.CallResult<Address> {
-    let result = super.tryCall(
-      "getDaoAddress",
-      "getDaoAddress():(address)",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
   getDaoFee(): PoolFactory__getDaoFeeResult {
@@ -909,6 +921,29 @@ export class PoolFactory extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBytes());
+  }
+
+  governanceAddress(): Address {
+    let result = super.call(
+      "governanceAddress",
+      "governanceAddress():(address)",
+      []
+    );
+
+    return result[0].toAddress();
+  }
+
+  try_governanceAddress(): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "governanceAddress",
+      "governanceAddress():(address)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
   isPaused(): boolean {
@@ -1289,8 +1324,12 @@ export class InitializeCall__Inputs {
     return this._call.inputValues[2].value.toAddress();
   }
 
-  get daoAddress(): Address {
+  get _daoAddress(): Address {
     return this._call.inputValues[3].value.toAddress();
+  }
+
+  get _governanceAddress(): Address {
+    return this._call.inputValues[4].value.toAddress();
   }
 }
 
@@ -1354,40 +1393,6 @@ export class RenounceOwnershipCall__Outputs {
   }
 }
 
-export class SetAssetGuardCall extends ethereum.Call {
-  get inputs(): SetAssetGuardCall__Inputs {
-    return new SetAssetGuardCall__Inputs(this);
-  }
-
-  get outputs(): SetAssetGuardCall__Outputs {
-    return new SetAssetGuardCall__Outputs(this);
-  }
-}
-
-export class SetAssetGuardCall__Inputs {
-  _call: SetAssetGuardCall;
-
-  constructor(call: SetAssetGuardCall) {
-    this._call = call;
-  }
-
-  get assetType(): i32 {
-    return this._call.inputValues[0].value.toI32();
-  }
-
-  get guardAddress(): Address {
-    return this._call.inputValues[1].value.toAddress();
-  }
-}
-
-export class SetAssetGuardCall__Outputs {
-  _call: SetAssetGuardCall;
-
-  constructor(call: SetAssetGuardCall) {
-    this._call = call;
-  }
-}
-
 export class SetAssetHandlerCall extends ethereum.Call {
   get inputs(): SetAssetHandlerCall__Inputs {
     return new SetAssetHandlerCall__Inputs(this);
@@ -1418,66 +1423,32 @@ export class SetAssetHandlerCall__Outputs {
   }
 }
 
-export class SetContractGuardCall extends ethereum.Call {
-  get inputs(): SetContractGuardCall__Inputs {
-    return new SetContractGuardCall__Inputs(this);
+export class SetDAOAddressCall extends ethereum.Call {
+  get inputs(): SetDAOAddressCall__Inputs {
+    return new SetDAOAddressCall__Inputs(this);
   }
 
-  get outputs(): SetContractGuardCall__Outputs {
-    return new SetContractGuardCall__Outputs(this);
+  get outputs(): SetDAOAddressCall__Outputs {
+    return new SetDAOAddressCall__Outputs(this);
   }
 }
 
-export class SetContractGuardCall__Inputs {
-  _call: SetContractGuardCall;
+export class SetDAOAddressCall__Inputs {
+  _call: SetDAOAddressCall;
 
-  constructor(call: SetContractGuardCall) {
+  constructor(call: SetDAOAddressCall) {
     this._call = call;
   }
 
-  get extContract(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
-  get guardAddress(): Address {
-    return this._call.inputValues[1].value.toAddress();
-  }
-}
-
-export class SetContractGuardCall__Outputs {
-  _call: SetContractGuardCall;
-
-  constructor(call: SetContractGuardCall) {
-    this._call = call;
-  }
-}
-
-export class SetDaoAddressCall extends ethereum.Call {
-  get inputs(): SetDaoAddressCall__Inputs {
-    return new SetDaoAddressCall__Inputs(this);
-  }
-
-  get outputs(): SetDaoAddressCall__Outputs {
-    return new SetDaoAddressCall__Outputs(this);
-  }
-}
-
-export class SetDaoAddressCall__Inputs {
-  _call: SetDaoAddressCall;
-
-  constructor(call: SetDaoAddressCall) {
-    this._call = call;
-  }
-
-  get daoAddress(): Address {
+  get _daoAddress(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
 }
 
-export class SetDaoAddressCall__Outputs {
-  _call: SetDaoAddressCall;
+export class SetDAOAddressCall__Outputs {
+  _call: SetDAOAddressCall;
 
-  constructor(call: SetDaoAddressCall) {
+  constructor(call: SetDAOAddressCall) {
     this._call = call;
   }
 }
@@ -1542,6 +1513,36 @@ export class SetExitCooldownCall__Outputs {
   _call: SetExitCooldownCall;
 
   constructor(call: SetExitCooldownCall) {
+    this._call = call;
+  }
+}
+
+export class SetGovernanceAddressCall extends ethereum.Call {
+  get inputs(): SetGovernanceAddressCall__Inputs {
+    return new SetGovernanceAddressCall__Inputs(this);
+  }
+
+  get outputs(): SetGovernanceAddressCall__Outputs {
+    return new SetGovernanceAddressCall__Outputs(this);
+  }
+}
+
+export class SetGovernanceAddressCall__Inputs {
+  _call: SetGovernanceAddressCall;
+
+  constructor(call: SetGovernanceAddressCall) {
+    this._call = call;
+  }
+
+  get _governanceAddress(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class SetGovernanceAddressCall__Outputs {
+  _call: SetGovernanceAddressCall;
+
+  constructor(call: SetGovernanceAddressCall) {
     this._call = call;
   }
 }

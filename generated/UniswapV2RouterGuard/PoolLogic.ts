@@ -554,6 +554,53 @@ export class PoolLogic extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
+  executeOperation(
+    assets: Array<Address>,
+    amounts: Array<BigInt>,
+    premiums: Array<BigInt>,
+    originator: Address,
+    params: Bytes
+  ): boolean {
+    let result = super.call(
+      "executeOperation",
+      "executeOperation(address[],uint256[],uint256[],address,bytes):(bool)",
+      [
+        ethereum.Value.fromAddressArray(assets),
+        ethereum.Value.fromUnsignedBigIntArray(amounts),
+        ethereum.Value.fromUnsignedBigIntArray(premiums),
+        ethereum.Value.fromAddress(originator),
+        ethereum.Value.fromBytes(params)
+      ]
+    );
+
+    return result[0].toBoolean();
+  }
+
+  try_executeOperation(
+    assets: Array<Address>,
+    amounts: Array<BigInt>,
+    premiums: Array<BigInt>,
+    originator: Address,
+    params: Bytes
+  ): ethereum.CallResult<boolean> {
+    let result = super.tryCall(
+      "executeOperation",
+      "executeOperation(address[],uint256[],uint256[],address,bytes):(bool)",
+      [
+        ethereum.Value.fromAddressArray(assets),
+        ethereum.Value.fromUnsignedBigIntArray(amounts),
+        ethereum.Value.fromUnsignedBigIntArray(premiums),
+        ethereum.Value.fromAddress(originator),
+        ethereum.Value.fromBytes(params)
+      ]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
   factory(): Address {
     let result = super.call("factory", "factory():(address)", []);
 
@@ -1105,6 +1152,56 @@ export class ExecTransactionCall__Outputs {
   }
 
   get success(): boolean {
+    return this._call.outputValues[0].value.toBoolean();
+  }
+}
+
+export class ExecuteOperationCall extends ethereum.Call {
+  get inputs(): ExecuteOperationCall__Inputs {
+    return new ExecuteOperationCall__Inputs(this);
+  }
+
+  get outputs(): ExecuteOperationCall__Outputs {
+    return new ExecuteOperationCall__Outputs(this);
+  }
+}
+
+export class ExecuteOperationCall__Inputs {
+  _call: ExecuteOperationCall;
+
+  constructor(call: ExecuteOperationCall) {
+    this._call = call;
+  }
+
+  get assets(): Array<Address> {
+    return this._call.inputValues[0].value.toAddressArray();
+  }
+
+  get amounts(): Array<BigInt> {
+    return this._call.inputValues[1].value.toBigIntArray();
+  }
+
+  get premiums(): Array<BigInt> {
+    return this._call.inputValues[2].value.toBigIntArray();
+  }
+
+  get originator(): Address {
+    return this._call.inputValues[3].value.toAddress();
+  }
+
+  get params(): Bytes {
+    return this._call.inputValues[4].value.toBytes();
+  }
+}
+
+export class ExecuteOperationCall__Outputs {
+  _call: ExecuteOperationCall;
+
+  constructor(call: ExecuteOperationCall) {
+    this._call = call;
+  }
+
+  get value0(): boolean {
     return this._call.outputValues[0].value.toBoolean();
   }
 }

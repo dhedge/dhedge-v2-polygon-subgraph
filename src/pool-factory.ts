@@ -1,5 +1,5 @@
 import {
-  DaoAddressSet as DaoAddressSetEvent,
+  DAOAddressSet as DaoAddressSetEvent,
   DaoFeeSet as DaoFeeSetEvent,
   ExitCooldownSet as ExitCooldownSetEvent,
   ExitFeeSet as ExitFeeSetEvent,
@@ -9,9 +9,7 @@ import {
   OwnershipTransferred as OwnershipTransferredEvent,
   Paused as PausedEvent,
   ProxyCreated as ProxyCreatedEvent,
-  SetAssetGuard as SetAssetGuardEvent,
   SetAssetHandler as SetAssetHandlerEvent,
-  SetContractGuard as SetContractGuardEvent,
   SetMaximumManagerFee as SetMaximumManagerFeeEvent,
   SetMaximumManagerFeeNumeratorChange as SetMaximumManagerFeeNumeratorChangeEvent,
   SetPoolManagerFee as SetPoolManagerFeeEvent,
@@ -29,9 +27,7 @@ import {
   OwnershipTransferred,
   Paused,
   ProxyCreated,
-  SetAssetGuard,
   SetAssetHandler,
-  SetContractGuard,
   SetMaximumManagerFee,
   SetMaximumManagerFeeNumeratorChange,
   SetPoolManagerFee,
@@ -44,7 +40,7 @@ export function handleDaoAddressSet(event: DaoAddressSetEvent): void {
   let entity = new DaoAddressSet(
     event.transaction.hash.toHex() + "-" + event.logIndex.toString()
   )
-  entity.dao = event.params.dao
+  entity.daoAddress = event.params.daoAddress
   entity.save()
 }
 
@@ -137,29 +133,11 @@ export function handleProxyCreated(event: ProxyCreatedEvent): void {
   entity.save()
 }
 
-export function handleSetAssetGuard(event: SetAssetGuardEvent): void {
-  let entity = new SetAssetGuard(
-    event.transaction.hash.toHex() + "-" + event.logIndex.toString()
-  )
-  entity.assetType = event.params.assetType
-  entity.guardAddress = event.params.guardAddress
-  entity.save()
-}
-
 export function handleSetAssetHandler(event: SetAssetHandlerEvent): void {
   let entity = new SetAssetHandler(
     event.transaction.hash.toHex() + "-" + event.logIndex.toString()
   )
   entity.assetHandler = event.params.assetHandler
-  entity.save()
-}
-
-export function handleSetContractGuard(event: SetContractGuardEvent): void {
-  let entity = new SetContractGuard(
-    event.transaction.hash.toHex() + "-" + event.logIndex.toString()
-  )
-  entity.extContract = event.params.extContract
-  entity.guardAddress = event.params.guardAddress
   entity.save()
 }
 
