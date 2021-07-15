@@ -42,13 +42,13 @@ export class DaoAddressSet extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get dao(): Bytes {
-    let value = this.get("dao");
+  get daoAddress(): Bytes {
+    let value = this.get("daoAddress");
     return value.toBytes();
   }
 
-  set dao(value: Bytes) {
-    this.set("dao", Value.fromBytes(value));
+  set daoAddress(value: Bytes) {
+    this.set("daoAddress", Value.fromBytes(value));
   }
 }
 
@@ -520,55 +520,6 @@ export class ProxyCreated extends Entity {
   }
 }
 
-export class SetAssetGuard extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id !== null, "Cannot save SetAssetGuard entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save SetAssetGuard entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("SetAssetGuard", id.toString(), this);
-  }
-
-  static load(id: string): SetAssetGuard | null {
-    return store.get("SetAssetGuard", id) as SetAssetGuard | null;
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get assetType(): i32 {
-    let value = this.get("assetType");
-    return value.toI32();
-  }
-
-  set assetType(value: i32) {
-    this.set("assetType", Value.fromI32(value));
-  }
-
-  get guardAddress(): Bytes {
-    let value = this.get("guardAddress");
-    return value.toBytes();
-  }
-
-  set guardAddress(value: Bytes) {
-    this.set("guardAddress", Value.fromBytes(value));
-  }
-}
-
 export class SetAssetHandler extends Entity {
   constructor(id: string) {
     super();
@@ -606,55 +557,6 @@ export class SetAssetHandler extends Entity {
 
   set assetHandler(value: Bytes) {
     this.set("assetHandler", Value.fromBytes(value));
-  }
-}
-
-export class SetContractGuard extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id !== null, "Cannot save SetContractGuard entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save SetContractGuard entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("SetContractGuard", id.toString(), this);
-  }
-
-  static load(id: string): SetContractGuard | null {
-    return store.get("SetContractGuard", id) as SetContractGuard | null;
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get extContract(): Bytes {
-    let value = this.get("extContract");
-    return value.toBytes();
-  }
-
-  set extContract(value: Bytes) {
-    this.set("extContract", Value.fromBytes(value));
-  }
-
-  get guardAddress(): Bytes {
-    let value = this.get("guardAddress");
-    return value.toBytes();
-  }
-
-  set guardAddress(value: Bytes) {
-    this.set("guardAddress", Value.fromBytes(value));
   }
 }
 

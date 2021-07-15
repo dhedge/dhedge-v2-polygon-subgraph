@@ -409,7 +409,7 @@ export class UniswapV2RouterGuard extends ethereum.SmartContract {
   txGuard(_poolManagerLogic: Address, param1: Address, data: Bytes): i32 {
     let result = super.call(
       "txGuard",
-      "txGuard(address,address,bytes):(uint8)",
+      "txGuard(address,address,bytes):(uint16)",
       [
         ethereum.Value.fromAddress(_poolManagerLogic),
         ethereum.Value.fromAddress(param1),
@@ -427,7 +427,7 @@ export class UniswapV2RouterGuard extends ethereum.SmartContract {
   ): ethereum.CallResult<i32> {
     let result = super.tryCall(
       "txGuard",
-      "txGuard(address,address,bytes):(uint8)",
+      "txGuard(address,address,bytes):(uint16)",
       [
         ethereum.Value.fromAddress(_poolManagerLogic),
         ethereum.Value.fromAddress(param1),

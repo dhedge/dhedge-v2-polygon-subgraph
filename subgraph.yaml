@@ -6,15 +6,15 @@ dataSources:
     name: PoolFactory
     network: matic
     source:
-      address: '0x4e86b7555dB05FEA5A5bc1f9d2e9Df3EAc3E5112'
+      address: '0x72b8CCE4bE8EfDC50e493cB210f9b9Eb15033453'
       abi: PoolFactory
-      startBlock: 15788932
+      startBlock: 16837364
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
-        - DaoAddressSet
+        - DAOAddressSet
         - DaoFeeSet
         - ExitCooldownSet
         - ExitFeeSet
@@ -24,9 +24,7 @@ dataSources:
         - OwnershipTransferred
         - Paused
         - ProxyCreated
-        - SetAssetGuard
         - SetAssetHandler
-        - SetContractGuard
         - SetMaximumManagerFee
         - SetMaximumManagerFeeNumeratorChange
         - SetPoolManagerFee
@@ -40,7 +38,7 @@ dataSources:
         - name: ERC20NameBytes
           file: ./abis/ERC20NameBytes.json
       eventHandlers:
-        - event: DaoAddressSet(address)
+        - event: DAOAddressSet(address)
           handler: handleDaoAddressSet
         - event: DaoFeeSet(uint256,uint256)
           handler: handleDaoFeeSet
@@ -60,12 +58,8 @@ dataSources:
           handler: handlePaused
         - event: ProxyCreated(address)
           handler: handleProxyCreated
-        - event: SetAssetGuard(uint8,address)
-          handler: handleSetAssetGuard
         - event: SetAssetHandler(address)
           handler: handleSetAssetHandler
-        - event: SetContractGuard(address,address)
-          handler: handleSetContractGuard
         - event: SetMaximumManagerFee(uint256,uint256)
           handler: handleSetMaximumManagerFee
         - event: SetMaximumManagerFeeNumeratorChange(uint256)
@@ -81,9 +75,9 @@ dataSources:
     name: UniswapV2RouterGuard
     network: matic
     source:
-      address: '0x4D703Dfc3a001C77c619Dba67aca1Ce7510F0d9D'
+      address: '0xe599ED237195Bc9519de657Dcc3CA53A914e29f5'
       abi: UniswapV2RouterGuard
-      startBlock: 15788961
+      startBlock: 16837372
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -149,8 +143,6 @@ templates:
           handler: handlePoolManagerLogicSet
         - event: PoolPrivacyUpdated(bool)
           handler: handlePoolPrivacyUpdated
-        - event: TransactionExecuted(address,address,uint8,uint256)
-          handler: handleTransactionExecuted
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
         - event: Withdrawal(address,address,uint256,uint256,uint256,uint256,uint256,(address,uint256,bool)[],uint256)
