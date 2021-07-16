@@ -229,3 +229,28 @@ type RemoveLiquidity @entity {
   time: Int!
   block: Int!
 }
+
+type Stake @entity {
+  id: ID!
+  fundAddress: Bytes!
+  asset: Bytes!
+  stakingContract: Bytes!
+  amount: BigInt!
+  time: Int!
+}
+
+type Unstake @entity {
+  id: ID!
+  fundAddress: Bytes!
+  asset: Bytes!
+  stakingContract: Bytes!
+  amount: BigInt!
+  time: Int!
+}
+
+type Claim @entity {
+  id: ID!
+  fundAddress: Bytes!
+  stakingContract: Bytes!
+  time: Int!
+}

@@ -1,3 +1,4 @@
+import { dataSource, log, Address, ethereum, BigInt } from '@graphprotocol/graph-ts';
 import { ERC20 } from '../generated/PoolFactory/ERC20';
 import {
   Approval as ApprovalEvent,
@@ -29,10 +30,8 @@ import {
   Transfer,
   Withdrawal,
   Pool,
-  Asset,
   AssetsWithdrawn,
 } from '../generated/schema';
-import { dataSource, log, Address } from '@graphprotocol/graph-ts';
 
 export function handleApproval(event: ApprovalEvent): void {
   let entity = new Approval(
