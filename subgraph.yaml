@@ -104,6 +104,33 @@ dataSources:
         - event: RemoveLiquidity(address,address,address,address,uint256,uint256)
           handler: handleRemoveLiquidity
       file: ./src/uniswap-v2-router-guard.ts
+  - kind: ethereum/contract
+    name: SushiMiniChefV2Guard
+    network: matic
+    source:
+      address: '0xf66bd3E6AAd8f2Bb9d988d87Fcc38b2CfEf29B89'
+      abi: SushiMiniChefV2Guard
+      startBlock: 16837404
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Pool
+        - Stake
+        - Unstake
+        - Claim
+      abis:
+        - name: SushiMiniChefV2Guard
+          file: ./abis/SushiMiniChefV2Guard.json
+      eventHandlers:
+        - event: Stake(address,address,address,uint256,uint256)
+          handler: handleStake
+        - event: Unstake(address,address,address,uint256,uint256)
+          handler: handleUnstake
+        - event: Claim(address,address,uint256)
+          handler: handleClaim
+      file: ./src/sushi-minichef-v2-guard.ts
 
 templates:
   - kind: ethereum/contract

@@ -1974,3 +1974,213 @@ export class RemoveLiquidity extends Entity {
     this.set("block", Value.fromI32(value));
   }
 }
+
+export class Stake extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save Stake entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save Stake entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("Stake", id.toString(), this);
+  }
+
+  static load(id: string): Stake | null {
+    return store.get("Stake", id) as Stake | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get fundAddress(): Bytes {
+    let value = this.get("fundAddress");
+    return value.toBytes();
+  }
+
+  set fundAddress(value: Bytes) {
+    this.set("fundAddress", Value.fromBytes(value));
+  }
+
+  get asset(): Bytes {
+    let value = this.get("asset");
+    return value.toBytes();
+  }
+
+  set asset(value: Bytes) {
+    this.set("asset", Value.fromBytes(value));
+  }
+
+  get stakingContract(): Bytes {
+    let value = this.get("stakingContract");
+    return value.toBytes();
+  }
+
+  set stakingContract(value: Bytes) {
+    this.set("stakingContract", Value.fromBytes(value));
+  }
+
+  get amount(): BigInt {
+    let value = this.get("amount");
+    return value.toBigInt();
+  }
+
+  set amount(value: BigInt) {
+    this.set("amount", Value.fromBigInt(value));
+  }
+
+  get time(): i32 {
+    let value = this.get("time");
+    return value.toI32();
+  }
+
+  set time(value: i32) {
+    this.set("time", Value.fromI32(value));
+  }
+}
+
+export class Unstake extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save Unstake entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save Unstake entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("Unstake", id.toString(), this);
+  }
+
+  static load(id: string): Unstake | null {
+    return store.get("Unstake", id) as Unstake | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get fundAddress(): Bytes {
+    let value = this.get("fundAddress");
+    return value.toBytes();
+  }
+
+  set fundAddress(value: Bytes) {
+    this.set("fundAddress", Value.fromBytes(value));
+  }
+
+  get asset(): Bytes {
+    let value = this.get("asset");
+    return value.toBytes();
+  }
+
+  set asset(value: Bytes) {
+    this.set("asset", Value.fromBytes(value));
+  }
+
+  get stakingContract(): Bytes {
+    let value = this.get("stakingContract");
+    return value.toBytes();
+  }
+
+  set stakingContract(value: Bytes) {
+    this.set("stakingContract", Value.fromBytes(value));
+  }
+
+  get amount(): BigInt {
+    let value = this.get("amount");
+    return value.toBigInt();
+  }
+
+  set amount(value: BigInt) {
+    this.set("amount", Value.fromBigInt(value));
+  }
+
+  get time(): i32 {
+    let value = this.get("time");
+    return value.toI32();
+  }
+
+  set time(value: i32) {
+    this.set("time", Value.fromI32(value));
+  }
+}
+
+export class Claim extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save Claim entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save Claim entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("Claim", id.toString(), this);
+  }
+
+  static load(id: string): Claim | null {
+    return store.get("Claim", id) as Claim | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get fundAddress(): Bytes {
+    let value = this.get("fundAddress");
+    return value.toBytes();
+  }
+
+  set fundAddress(value: Bytes) {
+    this.set("fundAddress", Value.fromBytes(value));
+  }
+
+  get stakingContract(): Bytes {
+    let value = this.get("stakingContract");
+    return value.toBytes();
+  }
+
+  set stakingContract(value: Bytes) {
+    this.set("stakingContract", Value.fromBytes(value));
+  }
+
+  get time(): i32 {
+    let value = this.get("time");
+    return value.toI32();
+  }
+
+  set time(value: i32) {
+    this.set("time", Value.fromI32(value));
+  }
+}
