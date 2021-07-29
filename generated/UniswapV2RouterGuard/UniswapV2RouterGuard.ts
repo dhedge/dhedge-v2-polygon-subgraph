@@ -39,8 +39,24 @@ export class AddLiquidity__Params {
     return this._event.parameters[3].value.toAddress();
   }
 
-  get time(): BigInt {
+  get amountADesired(): BigInt {
     return this._event.parameters[4].value.toBigInt();
+  }
+
+  get amountBDesired(): BigInt {
+    return this._event.parameters[5].value.toBigInt();
+  }
+
+  get amountAMin(): BigInt {
+    return this._event.parameters[6].value.toBigInt();
+  }
+
+  get amountBMin(): BigInt {
+    return this._event.parameters[7].value.toBigInt();
+  }
+
+  get time(): BigInt {
+    return this._event.parameters[8].value.toBigInt();
   }
 }
 
@@ -111,8 +127,16 @@ export class RemoveLiquidity__Params {
     return this._event.parameters[4].value.toBigInt();
   }
 
-  get time(): BigInt {
+  get amountAMin(): BigInt {
     return this._event.parameters[5].value.toBigInt();
+  }
+
+  get amountBMin(): BigInt {
+    return this._event.parameters[6].value.toBigInt();
+  }
+
+  get time(): BigInt {
+    return this._event.parameters[7].value.toBigInt();
   }
 }
 

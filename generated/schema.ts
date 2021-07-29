@@ -520,6 +520,52 @@ export class ProxyCreated extends Entity {
   }
 }
 
+export class SetManagerFeeNumeratorChangeDelay extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(
+      id !== null,
+      "Cannot save SetManagerFeeNumeratorChangeDelay entity without an ID"
+    );
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save SetManagerFeeNumeratorChangeDelay entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("SetManagerFeeNumeratorChangeDelay", id.toString(), this);
+  }
+
+  static load(id: string): SetManagerFeeNumeratorChangeDelay | null {
+    return store.get(
+      "SetManagerFeeNumeratorChangeDelay",
+      id
+    ) as SetManagerFeeNumeratorChangeDelay | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get delay(): BigInt {
+    let value = this.get("delay");
+    return value.toBigInt();
+  }
+
+  set delay(value: BigInt) {
+    this.set("delay", Value.fromBigInt(value));
+  }
+}
+
 export class SetAssetHandler extends Entity {
   constructor(id: string) {
     super();
@@ -707,7 +753,7 @@ export class SetPoolManagerFee extends Entity {
   }
 }
 
-export class SetTrackingCode extends Entity {
+export class SetPoolStorageVersion extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -715,17 +761,23 @@ export class SetTrackingCode extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save SetTrackingCode entity without an ID");
+    assert(
+      id !== null,
+      "Cannot save SetPoolStorageVersion entity without an ID"
+    );
     assert(
       id.kind == ValueKind.STRING,
-      "Cannot save SetTrackingCode entity with non-string ID. " +
+      "Cannot save SetPoolStorageVersion entity with non-string ID. " +
         'Considering using .toHex() to convert the "id" to a string.'
     );
-    store.set("SetTrackingCode", id.toString(), this);
+    store.set("SetPoolStorageVersion", id.toString(), this);
   }
 
-  static load(id: string): SetTrackingCode | null {
-    return store.get("SetTrackingCode", id) as SetTrackingCode | null;
+  static load(id: string): SetPoolStorageVersion | null {
+    return store.get(
+      "SetPoolStorageVersion",
+      id
+    ) as SetPoolStorageVersion | null;
   }
 
   get id(): string {
@@ -737,13 +789,13 @@ export class SetTrackingCode extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get code(): Bytes {
-    let value = this.get("code");
-    return value.toBytes();
+  get poolStorageVersion(): BigInt {
+    let value = this.get("poolStorageVersion");
+    return value.toBigInt();
   }
 
-  set code(value: Bytes) {
-    this.set("code", Value.fromBytes(value));
+  set poolStorageVersion(value: BigInt) {
+    this.set("poolStorageVersion", Value.fromBigInt(value));
   }
 }
 
@@ -1853,13 +1905,49 @@ export class AddLiquidity extends Entity {
     this.set("pair", Value.fromBytes(value));
   }
 
-  get time(): i32 {
-    let value = this.get("time");
-    return value.toI32();
+  get amountADesired(): BigInt {
+    let value = this.get("amountADesired");
+    return value.toBigInt();
   }
 
-  set time(value: i32) {
-    this.set("time", Value.fromI32(value));
+  set amountADesired(value: BigInt) {
+    this.set("amountADesired", Value.fromBigInt(value));
+  }
+
+  get amountBDesired(): BigInt {
+    let value = this.get("amountBDesired");
+    return value.toBigInt();
+  }
+
+  set amountBDesired(value: BigInt) {
+    this.set("amountBDesired", Value.fromBigInt(value));
+  }
+
+  get amountAMin(): BigInt {
+    let value = this.get("amountAMin");
+    return value.toBigInt();
+  }
+
+  set amountAMin(value: BigInt) {
+    this.set("amountAMin", Value.fromBigInt(value));
+  }
+
+  get amountBMin(): BigInt {
+    let value = this.get("amountBMin");
+    return value.toBigInt();
+  }
+
+  set amountBMin(value: BigInt) {
+    this.set("amountBMin", Value.fromBigInt(value));
+  }
+
+  get time(): BigInt {
+    let value = this.get("time");
+    return value.toBigInt();
+  }
+
+  set time(value: BigInt) {
+    this.set("time", Value.fromBigInt(value));
   }
 
   get block(): i32 {
@@ -1956,13 +2044,31 @@ export class RemoveLiquidity extends Entity {
     this.set("liquidity", Value.fromBigInt(value));
   }
 
-  get time(): i32 {
-    let value = this.get("time");
-    return value.toI32();
+  get amountAMin(): BigInt {
+    let value = this.get("amountAMin");
+    return value.toBigInt();
   }
 
-  set time(value: i32) {
-    this.set("time", Value.fromI32(value));
+  set amountAMin(value: BigInt) {
+    this.set("amountAMin", Value.fromBigInt(value));
+  }
+
+  get amountBMin(): BigInt {
+    let value = this.get("amountBMin");
+    return value.toBigInt();
+  }
+
+  set amountBMin(value: BigInt) {
+    this.set("amountBMin", Value.fromBigInt(value));
+  }
+
+  get time(): BigInt {
+    let value = this.get("time");
+    return value.toBigInt();
+  }
+
+  set time(value: BigInt) {
+    this.set("time", Value.fromBigInt(value));
   }
 
   get block(): i32 {

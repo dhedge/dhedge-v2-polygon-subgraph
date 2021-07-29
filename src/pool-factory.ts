@@ -10,10 +10,11 @@ import {
   Paused as PausedEvent,
   ProxyCreated as ProxyCreatedEvent,
   SetAssetHandler as SetAssetHandlerEvent,
+  SetManagerFeeNumeratorChangeDelay as SetManagerFeeNumeratorChangeDelayEvent,
   SetMaximumManagerFee as SetMaximumManagerFeeEvent,
   SetMaximumManagerFeeNumeratorChange as SetMaximumManagerFeeNumeratorChangeEvent,
   SetPoolManagerFee as SetPoolManagerFeeEvent,
-  SetTrackingCode as SetTrackingCodeEvent,
+  SetPoolStorageVersion as SetPoolStorageVersionEvent,
   Unpaused as UnpausedEvent
 } from "../generated/PoolFactory/PoolFactory"
 import {
@@ -28,10 +29,11 @@ import {
   Paused,
   ProxyCreated,
   SetAssetHandler,
+  SetManagerFeeNumeratorChangeDelay,
   SetMaximumManagerFee,
   SetMaximumManagerFeeNumeratorChange,
   SetPoolManagerFee,
-  SetTrackingCode,
+  SetPoolStorageVersion,
   Unpaused
 } from "../generated/schema"
 import { PoolLogic as PoolLogicTemplate } from '../generated/templates';
@@ -93,6 +95,14 @@ export function handleLogUpgrade(event: LogUpgradeEvent): void {
   )
   entity.manager = event.params.manager
   entity.pool = event.params.pool
+  entity.save()
+}
+
+export function handleSetManagerFeeNumeratorChangeDelay(event: SetManagerFeeNumeratorChangeDelayEvent): void {
+  let entity = new SetManagerFeeNumeratorChangeDelay(
+    event.transaction.hash.toHex() + "-" + event.logIndex.toString()
+  )
+  entity.delay = event.params.delay
   entity.save()
 }
 
@@ -171,11 +181,11 @@ export function handleSetPoolManagerFee(event: SetPoolManagerFeeEvent): void {
   entity.save()
 }
 
-export function handleSetTrackingCode(event: SetTrackingCodeEvent): void {
-  let entity = new SetTrackingCode(
+export function handleSetPoolStorageVersion(event: SetPoolStorageVersionEvent): void {
+  let entity = new SetPoolStorageVersion(
     event.transaction.hash.toHex() + "-" + event.logIndex.toString()
   )
-  entity.code = event.params.code
+  entity.poolStorageVersion = event.params.poolStorageVersion
   entity.save()
 }
 

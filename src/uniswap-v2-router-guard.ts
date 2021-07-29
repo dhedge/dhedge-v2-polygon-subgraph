@@ -98,7 +98,11 @@ export function handleAddLiquidity(event: AddLiquidityEvent): void {
   entity.tokenA = event.params.tokenA;
   entity.tokenB = event.params.tokenB;
   entity.pair = event.params.pair;
-  entity.time = event.block.timestamp.toI32();
+  entity.amountADesired = event.params.amountADesired;
+  entity.amountBDesired = event.params.amountBDesired;
+  entity.amountAMin = event.params.amountAMin;
+  entity.amountBMin = event.params.amountBMin;
+  entity.time = event.params.time;
   entity.block = event.block.number.toI32();
   entity.save();
 }
@@ -113,7 +117,9 @@ export function handleRemoveLiquidity(event: RemoveLiquidityEvent): void {
   entity.tokenB = event.params.tokenB;
   entity.pair = event.params.pair;
   entity.liquidity = event.params.liquidity;
-  entity.time = event.block.timestamp.toI32();
+  entity.amountAMin = event.params.amountAMin;
+  entity.amountBMin = event.params.amountBMin;
+  entity.time = event.params.time;
   entity.block = event.block.number.toI32();
   entity.save();
 }

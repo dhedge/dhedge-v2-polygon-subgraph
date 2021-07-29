@@ -244,6 +244,23 @@ export class PoolManagerLogic__getManagerFeeIncreaseInfoResult {
   }
 }
 
+export class PoolManagerLogic__getMaximumManagerFeeResult {
+  value0: BigInt;
+  value1: BigInt;
+
+  constructor(value0: BigInt, value1: BigInt) {
+    this.value0 = value0;
+    this.value1 = value1;
+  }
+
+  toMap(): TypedMap<string, ethereum.Value> {
+    let map = new TypedMap<string, ethereum.Value>();
+    map.set("value0", ethereum.Value.fromUnsignedBigInt(this.value0));
+    map.set("value1", ethereum.Value.fromUnsignedBigInt(this.value1));
+    return map;
+  }
+}
+
 export class PoolManagerLogic__getSupportedAssetsResultValue0Struct extends ethereum.Tuple {
   get asset(): Address {
     return this[0].toAddress();
@@ -578,6 +595,62 @@ export class PoolManagerLogic extends ethereum.SmartContract {
     );
   }
 
+  getMaximumManagerFee(): PoolManagerLogic__getMaximumManagerFeeResult {
+    let result = super.call(
+      "getMaximumManagerFee",
+      "getMaximumManagerFee():(uint256,uint256)",
+      []
+    );
+
+    return new PoolManagerLogic__getMaximumManagerFeeResult(
+      result[0].toBigInt(),
+      result[1].toBigInt()
+    );
+  }
+
+  try_getMaximumManagerFee(): ethereum.CallResult<
+    PoolManagerLogic__getMaximumManagerFeeResult
+  > {
+    let result = super.tryCall(
+      "getMaximumManagerFee",
+      "getMaximumManagerFee():(uint256,uint256)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(
+      new PoolManagerLogic__getMaximumManagerFeeResult(
+        value[0].toBigInt(),
+        value[1].toBigInt()
+      )
+    );
+  }
+
+  getMaximumManagerFeeChange(): BigInt {
+    let result = super.call(
+      "getMaximumManagerFeeChange",
+      "getMaximumManagerFeeChange():(uint256)",
+      []
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_getMaximumManagerFeeChange(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "getMaximumManagerFeeChange",
+      "getMaximumManagerFeeChange():(uint256)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
   getMembers(): Array<Address> {
     let result = super.call("getMembers", "getMembers():(address[])", []);
 
@@ -708,6 +781,29 @@ export class PoolManagerLogic extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
+  managerFeeNumerator(): BigInt {
+    let result = super.call(
+      "managerFeeNumerator",
+      "managerFeeNumerator():(uint256)",
+      []
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_managerFeeNumerator(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "managerFeeNumerator",
+      "managerFeeNumerator():(uint256)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
   managerName(): string {
@@ -1100,8 +1196,12 @@ export class InitializeCall__Inputs {
     return this._call.inputValues[3].value.toAddress();
   }
 
+  get _managerFeeNumerator(): BigInt {
+    return this._call.inputValues[4].value.toBigInt();
+  }
+
   get _supportedAssets(): Array<InitializeCall_supportedAssetsStruct> {
-    return this._call.inputValues[4].value.toTupleArray<
+    return this._call.inputValues[5].value.toTupleArray<
       InitializeCall_supportedAssetsStruct
     >();
   }
