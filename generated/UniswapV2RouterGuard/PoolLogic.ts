@@ -1201,7 +1201,7 @@ export class ExecuteOperationCall__Outputs {
     this._call = call;
   }
 
-  get value0(): boolean {
+  get success(): boolean {
     return this._call.outputValues[0].value.toBoolean();
   }
 }

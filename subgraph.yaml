@@ -6,9 +6,9 @@ dataSources:
     name: PoolFactory
     network: matic
     source:
-      address: '0x72b8CCE4bE8EfDC50e493cB210f9b9Eb15033453'
+      address: '0xfdc7b8bFe0DD3513Cc669bB8d601Cb83e2F69cB0'
       abi: PoolFactory
-      startBlock: 16837364
+      startBlock: 17343901
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -26,9 +26,10 @@ dataSources:
         - ProxyCreated
         - SetAssetHandler
         - SetMaximumManagerFee
+        - SetManagerFeeNumeratorChangeDelay
         - SetMaximumManagerFeeNumeratorChange
         - SetPoolManagerFee
-        - SetTrackingCode
+        - SetPoolStorageVersion
         - Unpaused
       abis:
         - name: PoolFactory
@@ -60,14 +61,16 @@ dataSources:
           handler: handleProxyCreated
         - event: SetAssetHandler(address)
           handler: handleSetAssetHandler
+        - event: SetManagerFeeNumeratorChangeDelay(uint256)
+          handler: handleSetManagerFeeNumeratorChangeDelay
         - event: SetMaximumManagerFee(uint256,uint256)
           handler: handleSetMaximumManagerFee
         - event: SetMaximumManagerFeeNumeratorChange(uint256)
           handler: handleSetMaximumManagerFeeNumeratorChange
         - event: SetPoolManagerFee(uint256,uint256)
           handler: handleSetPoolManagerFee
-        - event: SetTrackingCode(bytes32)
-          handler: handleSetTrackingCode
+        - event: SetPoolStorageVersion(uint256)
+          handler: handleSetPoolStorageVersion
         - event: Unpaused(address)
           handler: handleUnpaused
       file: ./src/pool-factory.ts
@@ -75,9 +78,9 @@ dataSources:
     name: UniswapV2RouterGuard
     network: matic
     source:
-      address: '0xe599ED237195Bc9519de657Dcc3CA53A914e29f5'
+      address: '0x3047511a1b78f63E132E3884c987eA315dd46045'
       abi: UniswapV2RouterGuard
-      startBlock: 16837372
+      startBlock: 17344397
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -99,18 +102,18 @@ dataSources:
       eventHandlers:
         - event: Exchange(address,address,uint256,address,uint256)
           handler: handleExchange
-        - event: AddLiquidity(address,address,address,address,uint256)
+        - event: AddLiquidity(address,address,address,address,uint256,uint256,uint256,uint256,uint256)
           handler: handleAddLiquidity
-        - event: RemoveLiquidity(address,address,address,address,uint256,uint256)
+        - event: RemoveLiquidity(address,address,address,address,uint256,uint256,uint256,uint256)
           handler: handleRemoveLiquidity
       file: ./src/uniswap-v2-router-guard.ts
   - kind: ethereum/contract
     name: SushiMiniChefV2Guard
     network: matic
     source:
-      address: '0xf66bd3E6AAd8f2Bb9d988d87Fcc38b2CfEf29B89'
+      address: '0x47C444b9d91D1F8ceF52f3170218EF89819d6E1b'
       abi: SushiMiniChefV2Guard
-      startBlock: 16837404
+      startBlock: 17344403
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4

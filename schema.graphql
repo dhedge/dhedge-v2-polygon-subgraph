@@ -59,6 +59,11 @@ type ProxyCreated @entity {
   proxy: Bytes!
 }
 
+type SetManagerFeeNumeratorChangeDelay @entity {
+  id: ID!
+  delay: BigInt! # uint256
+}
+
 type SetAssetHandler @entity {
   id: ID!
   assetHandler: Bytes! # address
@@ -81,9 +86,9 @@ type SetPoolManagerFee @entity {
   denominator: BigInt! # uint256
 }
 
-type SetTrackingCode @entity {
+type SetPoolStorageVersion @entity {
   id: ID!
-  code: Bytes! # bytes32
+  poolStorageVersion: BigInt! # uint256
 }
 
 type Unpaused @entity {
@@ -214,7 +219,11 @@ type AddLiquidity @entity {
   tokenA: Bytes!
   tokenB: Bytes!
   pair: Bytes!
-  time: Int!
+  amountADesired: BigInt!
+  amountBDesired: BigInt!
+  amountAMin: BigInt!
+  amountBMin: BigInt!
+  time: BigInt!
   block: Int!
   pool: Pool!
 }
@@ -226,7 +235,9 @@ type RemoveLiquidity @entity {
   tokenB: Bytes!
   pair: Bytes!
   liquidity: BigInt!
-  time: Int!
+  amountAMin: BigInt!
+  amountBMin: BigInt!
+  time: BigInt!
   block: Int!
 }
 
