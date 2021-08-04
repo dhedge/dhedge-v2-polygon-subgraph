@@ -34,7 +34,8 @@ import {
   SetMaximumManagerFeeNumeratorChange,
   SetPoolManagerFee,
   SetPoolStorageVersion,
-  Unpaused
+  Unpaused,
+  Manager
 } from "../generated/schema"
 import { PoolLogic as PoolLogicTemplate } from '../generated/templates';
 
@@ -76,6 +77,16 @@ export function handleFundCreated(event: FundCreatedEvent): void {
   let entity = new FundCreated(
     event.transaction.hash.toHex() + "-" + event.logIndex.toString()
   )
+
+  let managerAddress = event.params.manager.toHexString()
+  let manager = Manager.load(managerAddress)
+  if (!manager) {
+    manager = new Manager(managerAddress)
+    manager.managerAddress = event.params.manager;
+  }
+  manager.save();
+
+  entity.uniqueManager = manager.id;
   entity.fundAddress = event.params.fundAddress
   entity.isPoolPrivate = event.params.isPoolPrivate
   entity.fundName = event.params.fundName

@@ -30,6 +30,7 @@ type FundCreated @entity {
   time: BigInt!
   managerFeeNumerator: BigInt!
   managerFeeDenominator: BigInt!
+  uniqueManager: Manager!
 }
 
 type LogUpgrade @entity {
@@ -273,4 +274,10 @@ type Investor @entity {
   investorAddress: Bytes! # address
   deposits: [Deposit!]! @derivedFrom(field: "uniqueInvestor")
   withdrawals: [Withdrawal!]! @derivedFrom(field: "uniqueInvestor")
+}
+
+type Manager @entity {
+  id: ID!
+  managerAddress: Bytes! # address
+  fundCreated: [FundCreated!]! @derivedFrom(field: "uniqueManager")
 }
