@@ -291,6 +291,15 @@ export class FundCreated extends Entity {
   set managerFeeDenominator(value: BigInt) {
     this.set("managerFeeDenominator", Value.fromBigInt(value));
   }
+
+  get uniqueManager(): string {
+    let value = this.get("uniqueManager");
+    return value.toString();
+  }
+
+  set uniqueManager(value: string) {
+    this.set("uniqueManager", Value.fromString(value));
+  }
 }
 
 export class LogUpgrade extends Entity {
@@ -1025,6 +1034,15 @@ export class Deposit extends Entity {
   set pool(value: string) {
     this.set("pool", Value.fromString(value));
   }
+
+  get uniqueInvestor(): string {
+    let value = this.get("uniqueInvestor");
+    return value.toString();
+  }
+
+  set uniqueInvestor(value: string) {
+    this.set("uniqueInvestor", Value.fromString(value));
+  }
 }
 
 export class ManagerFeeMinted extends Entity {
@@ -1453,6 +1471,15 @@ export class Withdrawal extends Entity {
 
   set assetsWithdrawn(value: Array<string>) {
     this.set("assetsWithdrawn", Value.fromStringArray(value));
+  }
+
+  get uniqueInvestor(): string {
+    let value = this.get("uniqueInvestor");
+    return value.toString();
+  }
+
+  set uniqueInvestor(value: string) {
+    this.set("uniqueInvestor", Value.fromString(value));
   }
 }
 
@@ -2288,5 +2315,112 @@ export class Claim extends Entity {
 
   set time(value: i32) {
     this.set("time", Value.fromI32(value));
+  }
+}
+
+export class Investor extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save Investor entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save Investor entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("Investor", id.toString(), this);
+  }
+
+  static load(id: string): Investor | null {
+    return store.get("Investor", id) as Investor | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get investorAddress(): Bytes {
+    let value = this.get("investorAddress");
+    return value.toBytes();
+  }
+
+  set investorAddress(value: Bytes) {
+    this.set("investorAddress", Value.fromBytes(value));
+  }
+
+  get deposits(): Array<string> {
+    let value = this.get("deposits");
+    return value.toStringArray();
+  }
+
+  set deposits(value: Array<string>) {
+    this.set("deposits", Value.fromStringArray(value));
+  }
+
+  get withdrawals(): Array<string> {
+    let value = this.get("withdrawals");
+    return value.toStringArray();
+  }
+
+  set withdrawals(value: Array<string>) {
+    this.set("withdrawals", Value.fromStringArray(value));
+  }
+}
+
+export class Manager extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save Manager entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save Manager entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("Manager", id.toString(), this);
+  }
+
+  static load(id: string): Manager | null {
+    return store.get("Manager", id) as Manager | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get managerAddress(): Bytes {
+    let value = this.get("managerAddress");
+    return value.toBytes();
+  }
+
+  set managerAddress(value: Bytes) {
+    this.set("managerAddress", Value.fromBytes(value));
+  }
+
+  get fundCreated(): Array<string> {
+    let value = this.get("fundCreated");
+    return value.toStringArray();
+  }
+
+  set fundCreated(value: Array<string>) {
+    this.set("fundCreated", Value.fromStringArray(value));
   }
 }

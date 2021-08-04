@@ -31,6 +31,7 @@ import {
   Withdrawal,
   Pool,
   AssetsWithdrawn,
+  Investor
 } from '../generated/schema';
 
 export function handleApproval(event: ApprovalEvent): void {
@@ -55,6 +56,16 @@ export function handleDeposit(event: DepositEvent): void {
   let asset = instantiateAsset(pool, event.params.assetDeposited, event);
   asset.save();
 
+  // on deposits, load or create an Investor entity
+  let investorAddress = event.params.investor.toHexString()
+  let investor = Investor.load(investorAddress)
+  if (!investor) {
+    investor = new Investor(investorAddress)
+    investor.investorAddress = event.params.investor;
+  }
+  investor.save();
+
+  entity.uniqueInvestor = investor.id;
   entity.pool = pool.id;
   entity.fundAddress = event.params.fundAddress;
   entity.totalSupply = pool.totalSupply;
@@ -166,6 +177,15 @@ export function handleWithdrawal(event: WithdrawalEvent): void {
     // asset.save();
   };
 
+  let investorAddress = event.params.investor.toHexString()
+  let investor = Investor.load(investorAddress)
+  if (!investor) {
+    investor = new Investor(investorAddress)
+    investor.investorAddress = event.params.investor;
+  }
+  investor.save();
+
+  entity.uniqueInvestor = investor.id;
   entity.pool = pool.id;
   entity.fundAddress = event.params.fundAddress;
   entity.totalSupply = pool.totalSupply;
