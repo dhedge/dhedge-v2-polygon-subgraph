@@ -116,6 +116,7 @@ type Deposit @entity {
   time: BigInt!
   block: Int!
   pool: Pool!
+  uniqueInvestor: Investor!
 }
 
 type ManagerFeeMinted @entity {
@@ -167,6 +168,7 @@ type Withdrawal @entity {
   block: Int!
   pool: Pool!
   assetsWithdrawn: [AssetsWithdrawn!]! @derivedFrom(field: "withdrawal")
+  uniqueInvestor: Investor!
 }
 
 type AssetsWithdrawn @entity {
@@ -264,4 +266,11 @@ type Claim @entity {
   fundAddress: Bytes!
   stakingContract: Bytes!
   time: Int!
+}
+
+type Investor @entity {
+  id: ID!
+  investorAddress: Bytes! # address
+  deposits: [Deposit!]! @derivedFrom(field: "uniqueInvestor")
+  withdrawals: [Withdrawal!]! @derivedFrom(field: "uniqueInvestor")
 }
