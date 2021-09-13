@@ -175,6 +175,8 @@ templates:
           handler: handlePoolPrivacyUpdated
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
+        - event: TransactionExecuted(address,address,uint16,uint256)
+          handler: handleTransactionExecuted
         - event: Withdrawal(address,address,uint256,uint256,uint256,uint256,uint256,(address,uint256,bool)[],uint256)
           handler: handleWithdrawal
       file: ./src/pool-logic.ts
