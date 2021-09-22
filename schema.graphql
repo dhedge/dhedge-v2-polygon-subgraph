@@ -116,6 +116,7 @@ type Deposit @entity {
   totalSupply: BigDecimal!
   time: BigInt!
   block: Int!
+  poolName: String!
   pool: Pool!
   uniqueInvestor: Investor!
 }
@@ -147,6 +148,7 @@ type TransactionExecuted @entity {
   manager: Bytes!
   transactionType: Int!
   time: BigInt!
+  poolName: String!
 }
 
 type Transfer @entity {
@@ -167,6 +169,7 @@ type Withdrawal @entity {
   totalSupply: BigDecimal!
   time: BigInt!
   block: Int!
+  poolName: String!
   pool: Pool!
   assetsWithdrawn: [AssetsWithdrawn!]! @derivedFrom(field: "withdrawal")
   uniqueInvestor: Investor!
