@@ -1026,6 +1026,15 @@ export class Deposit extends Entity {
     this.set("block", Value.fromI32(value));
   }
 
+  get poolName(): string {
+    let value = this.get("poolName");
+    return value.toString();
+  }
+
+  set poolName(value: string) {
+    this.set("poolName", Value.fromString(value));
+  }
+
   get pool(): string {
     let value = this.get("pool");
     return value.toString();
@@ -1284,6 +1293,15 @@ export class TransactionExecuted extends Entity {
   set time(value: BigInt) {
     this.set("time", Value.fromBigInt(value));
   }
+
+  get poolName(): string {
+    let value = this.get("poolName");
+    return value.toString();
+  }
+
+  set poolName(value: string) {
+    this.set("poolName", Value.fromString(value));
+  }
 }
 
 export class Transfer extends Entity {
@@ -1453,6 +1471,15 @@ export class Withdrawal extends Entity {
 
   set block(value: i32) {
     this.set("block", Value.fromI32(value));
+  }
+
+  get poolName(): string {
+    let value = this.get("poolName");
+    return value.toString();
+  }
+
+  set poolName(value: string) {
+    this.set("poolName", Value.fromString(value));
   }
 
   get pool(): string {

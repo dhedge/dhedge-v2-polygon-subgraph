@@ -1,4 +1,10 @@
-import { dataSource, log, Address, ethereum, BigInt } from '@graphprotocol/graph-ts';
+import {
+  dataSource,
+  log,
+  Address,
+  ethereum,
+  BigInt,
+} from '@graphprotocol/graph-ts';
 import { ERC20 } from '../generated/PoolFactory/ERC20';
 import {
   Approval as ApprovalEvent,
@@ -10,15 +16,15 @@ import {
   Transfer as TransferEvent,
   Withdrawal as WithdrawalEvent,
   PoolLogic,
-  WithdrawalWithdrawnAssetsStruct
+  WithdrawalWithdrawnAssetsStruct,
 } from '../generated/templates/PoolLogic/PoolLogic';
-import { 
+import {
   fetchTokenDecimals,
   convertTokenToDecimal,
   fetchTokenName,
   instantiatePool,
   instantiateAsset,
-} from "../src/helpers";
+} from '../src/helpers';
 import { PoolManagerLogic } from '../generated/templates/PoolLogic/PoolManagerLogic';
 import {
   Approval,
@@ -31,7 +37,7 @@ import {
   Withdrawal,
   Pool,
   AssetsWithdrawn,
-  Investor
+  Investor,
 } from '../generated/schema';
 
 export function handleApproval(event: ApprovalEvent): void {
@@ -51,20 +57,21 @@ export function handleDeposit(event: DepositEvent): void {
   let id = dataSource.address().toHexString();
   let pool = instantiatePool(id, event.params.fundAddress, event);
   pool.save();
-  
+
   // load of create asset & update Pool's balance for asset
   let asset = instantiateAsset(pool, event.params.assetDeposited, event);
   asset.save();
 
   // on deposits, load or create an Investor entity
-  let investorAddress = event.params.investor.toHexString()
-  let investor = Investor.load(investorAddress)
+  let investorAddress = event.params.investor.toHexString();
+  let investor = Investor.load(investorAddress);
   if (!investor) {
-    investor = new Investor(investorAddress)
+    investor = new Investor(investorAddress);
     investor.investorAddress = event.params.investor;
   }
   investor.save();
 
+  entity.poolName = pool.name;
   entity.uniqueInvestor = investor.id;
   entity.pool = pool.id;
   entity.fundAddress = event.params.fundAddress;
@@ -76,7 +83,7 @@ export function handleDeposit(event: DepositEvent): void {
   entity.totalInvestorFundTokens = event.params.totalInvestorFundTokens;
   entity.fundValue = event.params.fundValue;
   entity.time = event.params.time;
-  entity.block = event.block.number.toI32()
+  entity.block = event.block.number.toI32();
   entity.save();
 }
 
@@ -84,7 +91,7 @@ export function handleManagerFeeMinted(event: ManagerFeeMintedEvent): void {
   let entity = new ManagerFeeMinted(
     event.transaction.hash.toHex() + '-' + event.logIndex.toString()
   );
-  
+
   entity.pool = event.params.pool;
   entity.manager = event.params.manager;
   entity.available = event.params.available;
@@ -94,11 +101,13 @@ export function handleManagerFeeMinted(event: ManagerFeeMintedEvent): void {
   entity.save();
 }
 
-export function handlePoolManagerLogicSet(event: PoolManagerLogicSetEvent): void {
+export function handlePoolManagerLogicSet(
+  event: PoolManagerLogicSetEvent
+): void {
   let entity = new PoolManagerLogicSet(
     event.transaction.hash.toHex() + '-' + event.logIndex.toString()
   );
-  
+
   entity.poolManagerLogic = event.params.poolManagerLogic;
   entity.from = event.params.from;
   entity.save();
@@ -108,16 +117,22 @@ export function handlePoolPrivacyUpdated(event: PoolPrivacyUpdatedEvent): void {
   let entity = new PoolPrivacyUpdated(
     event.transaction.hash.toHex() + '-' + event.logIndex.toString()
   );
-  
+
   entity.isPoolPrivate = event.params.isPoolPrivate;
   entity.save();
 }
 
-export function handleTransactionExecuted(event: TransactionExecutedEvent): void {
+export function handleTransactionExecuted(
+  event: TransactionExecutedEvent
+): void {
   let entity = new TransactionExecuted(
     event.transaction.hash.toHex() + '-' + event.logIndex.toString()
   );
-  
+  let id = dataSource.address().toHexString();
+  let pool = instantiatePool(id, event.params.pool, event);
+  // pool.save();
+
+  entity.poolName = pool.name;
   entity.pool = event.params.pool;
   entity.manager = event.params.manager;
   entity.transactionType = event.params.transactionType;
@@ -143,11 +158,16 @@ export function handleWithdrawal(event: WithdrawalEvent): void {
   let pool = instantiatePool(id, event.params.fundAddress, event);
   pool.save();
 
-  let withdrawnAssetsTuple = event.params.withdrawnAssets as Array<WithdrawalWithdrawnAssetsStruct>;
+  let withdrawnAssetsTuple = event.params.withdrawnAssets as Array<
+    WithdrawalWithdrawnAssetsStruct
+  >;
   for (let i = 0; i < withdrawnAssetsTuple.length; i++) {
     let blockData = withdrawnAssetsTuple[i];
     let decimals = fetchTokenDecimals(blockData.asset);
-    let tokenAmountWithdrawn = convertTokenToDecimal(blockData.amount, decimals);
+    let tokenAmountWithdrawn = convertTokenToDecimal(
+      blockData.amount,
+      decimals
+    );
 
     let withdrawnAssets = new AssetsWithdrawn(
       event.transaction.hash.toHex() + '-' + blockData.asset.toHexString()
@@ -175,16 +195,17 @@ export function handleWithdrawal(event: WithdrawalEvent): void {
     // asset.time = event.block.timestamp.toI32();
     // asset.decimals = decimals;
     // asset.save();
-  };
+  }
 
-  let investorAddress = event.params.investor.toHexString()
-  let investor = Investor.load(investorAddress)
+  let investorAddress = event.params.investor.toHexString();
+  let investor = Investor.load(investorAddress);
   if (!investor) {
-    investor = new Investor(investorAddress)
+    investor = new Investor(investorAddress);
     investor.investorAddress = event.params.investor;
   }
   investor.save();
 
+  entity.poolName = pool.name;
   entity.uniqueInvestor = investor.id;
   entity.pool = pool.id;
   entity.fundAddress = event.params.fundAddress;
