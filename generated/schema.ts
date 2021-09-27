@@ -1035,6 +1035,15 @@ export class Deposit extends Entity {
     this.set("poolName", Value.fromString(value));
   }
 
+  get managerName(): string {
+    let value = this.get("managerName");
+    return value.toString();
+  }
+
+  set managerName(value: string) {
+    this.set("managerName", Value.fromString(value));
+  }
+
   get pool(): string {
     let value = this.get("pool");
     return value.toString();
@@ -1302,6 +1311,15 @@ export class TransactionExecuted extends Entity {
   set poolName(value: string) {
     this.set("poolName", Value.fromString(value));
   }
+
+  get managerName(): string {
+    let value = this.get("managerName");
+    return value.toString();
+  }
+
+  set managerName(value: string) {
+    this.set("managerName", Value.fromString(value));
+  }
 }
 
 export class Transfer extends Entity {
@@ -1480,6 +1498,15 @@ export class Withdrawal extends Entity {
 
   set poolName(value: string) {
     this.set("poolName", Value.fromString(value));
+  }
+
+  get managerName(): string {
+    let value = this.get("managerName");
+    return value.toString();
+  }
+
+  set managerName(value: string) {
+    this.set("managerName", Value.fromString(value));
   }
 
   get pool(): string {
