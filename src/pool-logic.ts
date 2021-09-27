@@ -71,6 +71,7 @@ export function handleDeposit(event: DepositEvent): void {
   }
   investor.save();
 
+  entity.managerName = pool.managerName;
   entity.poolName = pool.name;
   entity.uniqueInvestor = investor.id;
   entity.pool = pool.id;
@@ -132,6 +133,7 @@ export function handleTransactionExecuted(
   let pool = instantiatePool(id, event.params.pool, event);
   // pool.save();
 
+  entity.managerName = pool.managerName;
   entity.poolName = pool.name;
   entity.pool = event.params.pool;
   entity.manager = event.params.manager;
@@ -205,6 +207,7 @@ export function handleWithdrawal(event: WithdrawalEvent): void {
   }
   investor.save();
 
+  entity.managerName = pool.managerName;
   entity.poolName = pool.name;
   entity.uniqueInvestor = investor.id;
   entity.pool = pool.id;
