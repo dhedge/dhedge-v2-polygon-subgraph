@@ -1833,6 +1833,15 @@ export class Pool extends Entity {
   set assets(value: Array<string>) {
     this.set("assets", Value.fromStringArray(value));
   }
+
+  get tokenPrice(): BigInt {
+    let value = this.get("tokenPrice");
+    return value.toBigInt();
+  }
+
+  set tokenPrice(value: BigInt) {
+    this.set("tokenPrice", Value.fromBigInt(value));
+  }
 }
 
 export class Asset extends Entity {
