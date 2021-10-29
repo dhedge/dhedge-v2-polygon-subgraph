@@ -209,6 +209,7 @@ type Pool @entity {
   withdrawals: [Withdrawal!]! @derivedFrom(field: "pool")
   exchanges: [Exchange!]! @derivedFrom(field: "pool")
   assets: [Asset!]! @derivedFrom(field: "pool")
+  tokenPrice: BigInt! # uint256
 }
 
 type Asset @entity {
