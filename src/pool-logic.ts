@@ -131,7 +131,7 @@ export function handleTransactionExecuted(
   );
   let id = dataSource.address().toHexString();
   let pool = instantiatePool(id, event.params.pool, event);
-  // pool.save();
+  pool.save();
 
   entity.managerName = pool.managerName;
   entity.poolName = pool.name;
