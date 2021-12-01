@@ -130,6 +130,7 @@ type ManagerFeeMinted @entity {
   daoFee: BigInt!
   managerFee: BigInt!
   tokenPriceAtLastFeeMint: BigInt!
+  block: Int!
 }
 
 type PoolManagerLogicSet @entity {
