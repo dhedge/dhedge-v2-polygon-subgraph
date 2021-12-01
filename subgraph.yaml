@@ -134,6 +134,36 @@ dataSources:
         - event: Claim(address,address,uint256)
           handler: handleClaim
       file: ./src/sushi-minichef-v2-guard.ts
+  - kind: ethereum/contract
+    name: BalancerV2Guard
+    network: matic
+    source:
+      address: '0xC6CF4B058c51cf474c5984180e693AF438222363'
+      abi: BalancerV2Guard
+      startBlock: 20551075
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Pool
+        - ExchangeFrom
+        - ExchangeTo
+      abis:
+        - name: BalancerV2Guard
+          file: ./abis/BalancerV2Guard.json
+      eventHandlers:
+        - event: ExchangeFrom(address,address,uint256,address,uint256)
+          handler: handleExchangeFrom
+        - event: ExchangeTo(address,address,address,uint256,uint256)
+          handler: handleExchangeTo
+        - event: ExitPool(address,bytes32,address[],uint256[],uint256)
+          handler: handleExitPool
+        - event: JoinPool(address,bytes32,address[],uint256[],uint256)
+          handler: handleJoinPool
+        # - event: OwnershipTransferred(indexed address,indexed address)
+        #   handler: handleOwnershipTransferred
+      file: ./src/balancer-v2-guard.ts
 
 templates:
   - kind: ethereum/contract

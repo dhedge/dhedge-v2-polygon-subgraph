@@ -2487,3 +2487,289 @@ export class Manager extends Entity {
     this.set("fundCreated", Value.fromStringArray(value));
   }
 }
+
+export class ExchangeFrom extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save ExchangeFrom entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save ExchangeFrom entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("ExchangeFrom", id.toString(), this);
+  }
+
+  static load(id: string): ExchangeFrom | null {
+    return store.get("ExchangeFrom", id) as ExchangeFrom | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get fundAddress(): Bytes {
+    let value = this.get("fundAddress");
+    return value.toBytes();
+  }
+
+  set fundAddress(value: Bytes) {
+    this.set("fundAddress", Value.fromBytes(value));
+  }
+
+  get sourceAsset(): Bytes {
+    let value = this.get("sourceAsset");
+    return value.toBytes();
+  }
+
+  set sourceAsset(value: Bytes) {
+    this.set("sourceAsset", Value.fromBytes(value));
+  }
+
+  get sourceAmount(): BigInt {
+    let value = this.get("sourceAmount");
+    return value.toBigInt();
+  }
+
+  set sourceAmount(value: BigInt) {
+    this.set("sourceAmount", Value.fromBigInt(value));
+  }
+
+  get dstAsset(): Bytes {
+    let value = this.get("dstAsset");
+    return value.toBytes();
+  }
+
+  set dstAsset(value: Bytes) {
+    this.set("dstAsset", Value.fromBytes(value));
+  }
+
+  get time(): BigInt {
+    let value = this.get("time");
+    return value.toBigInt();
+  }
+
+  set time(value: BigInt) {
+    this.set("time", Value.fromBigInt(value));
+  }
+}
+
+export class ExchangeTo extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save ExchangeTo entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save ExchangeTo entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("ExchangeTo", id.toString(), this);
+  }
+
+  static load(id: string): ExchangeTo | null {
+    return store.get("ExchangeTo", id) as ExchangeTo | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get fundAddress(): Bytes {
+    let value = this.get("fundAddress");
+    return value.toBytes();
+  }
+
+  set fundAddress(value: Bytes) {
+    this.set("fundAddress", Value.fromBytes(value));
+  }
+
+  get sourceAsset(): Bytes {
+    let value = this.get("sourceAsset");
+    return value.toBytes();
+  }
+
+  set sourceAsset(value: Bytes) {
+    this.set("sourceAsset", Value.fromBytes(value));
+  }
+
+  get dstAsset(): Bytes {
+    let value = this.get("dstAsset");
+    return value.toBytes();
+  }
+
+  set dstAsset(value: Bytes) {
+    this.set("dstAsset", Value.fromBytes(value));
+  }
+
+  get dstAmount(): BigInt {
+    let value = this.get("dstAmount");
+    return value.toBigInt();
+  }
+
+  set dstAmount(value: BigInt) {
+    this.set("dstAmount", Value.fromBigInt(value));
+  }
+
+  get time(): BigInt {
+    let value = this.get("time");
+    return value.toBigInt();
+  }
+
+  set time(value: BigInt) {
+    this.set("time", Value.fromBigInt(value));
+  }
+}
+
+export class JoinPool extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save JoinPool entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save JoinPool entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("JoinPool", id.toString(), this);
+  }
+
+  static load(id: string): JoinPool | null {
+    return store.get("JoinPool", id) as JoinPool | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get fundAddress(): Bytes {
+    let value = this.get("fundAddress");
+    return value.toBytes();
+  }
+
+  set fundAddress(value: Bytes) {
+    this.set("fundAddress", Value.fromBytes(value));
+  }
+
+  get poolId(): Bytes {
+    let value = this.get("poolId");
+    return value.toBytes();
+  }
+
+  set poolId(value: Bytes) {
+    this.set("poolId", Value.fromBytes(value));
+  }
+
+  get assets(): Array<Bytes> {
+    let value = this.get("assets");
+    return value.toBytesArray();
+  }
+
+  set assets(value: Array<Bytes>) {
+    this.set("assets", Value.fromBytesArray(value));
+  }
+
+  get time(): BigInt {
+    let value = this.get("time");
+    return value.toBigInt();
+  }
+
+  set time(value: BigInt) {
+    this.set("time", Value.fromBigInt(value));
+  }
+}
+
+export class ExitPool extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save ExitPool entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save ExitPool entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("ExitPool", id.toString(), this);
+  }
+
+  static load(id: string): ExitPool | null {
+    return store.get("ExitPool", id) as ExitPool | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get fundAddress(): Bytes {
+    let value = this.get("fundAddress");
+    return value.toBytes();
+  }
+
+  set fundAddress(value: Bytes) {
+    this.set("fundAddress", Value.fromBytes(value));
+  }
+
+  get poolId(): Bytes {
+    let value = this.get("poolId");
+    return value.toBytes();
+  }
+
+  set poolId(value: Bytes) {
+    this.set("poolId", Value.fromBytes(value));
+  }
+
+  get assets(): Array<Bytes> {
+    let value = this.get("assets");
+    return value.toBytesArray();
+  }
+
+  set assets(value: Array<Bytes>) {
+    this.set("assets", Value.fromBytesArray(value));
+  }
+
+  get time(): BigInt {
+    let value = this.get("time");
+    return value.toBigInt();
+  }
+
+  set time(value: BigInt) {
+    this.set("time", Value.fromBigInt(value));
+  }
+}

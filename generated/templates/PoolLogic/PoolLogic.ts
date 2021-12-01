@@ -285,8 +285,25 @@ export class WithdrawalWithdrawnAssetsStruct extends ethereum.Tuple {
     return this[1].toBigInt();
   }
 
-  get withdrawProcessed(): boolean {
+  get externalWithdrawProcessed(): boolean {
     return this[2].toBoolean();
+  }
+}
+
+export class PoolLogic__availableManagerFeeAndTotalFundValueResult {
+  value0: BigInt;
+  value1: BigInt;
+
+  constructor(value0: BigInt, value1: BigInt) {
+    this.value0 = value0;
+    this.value1 = value1;
+  }
+
+  toMap(): TypedMap<string, ethereum.Value> {
+    let map = new TypedMap<string, ethereum.Value>();
+    map.set("value0", ethereum.Value.fromUnsignedBigInt(this.value0));
+    map.set("value1", ethereum.Value.fromUnsignedBigInt(this.value1));
+    return map;
   }
 }
 
@@ -300,6 +317,8 @@ export class PoolLogic__getFundSummaryResult {
   value6: boolean;
   value7: BigInt;
   value8: BigInt;
+  value9: BigInt;
+  value10: BigInt;
 
   constructor(
     value0: string,
@@ -310,7 +329,9 @@ export class PoolLogic__getFundSummaryResult {
     value5: BigInt,
     value6: boolean,
     value7: BigInt,
-    value8: BigInt
+    value8: BigInt,
+    value9: BigInt,
+    value10: BigInt
   ) {
     this.value0 = value0;
     this.value1 = value1;
@@ -321,6 +342,8 @@ export class PoolLogic__getFundSummaryResult {
     this.value6 = value6;
     this.value7 = value7;
     this.value8 = value8;
+    this.value9 = value9;
+    this.value10 = value10;
   }
 
   toMap(): TypedMap<string, ethereum.Value> {
@@ -334,6 +357,8 @@ export class PoolLogic__getFundSummaryResult {
     map.set("value6", ethereum.Value.fromBoolean(this.value6));
     map.set("value7", ethereum.Value.fromUnsignedBigInt(this.value7));
     map.set("value8", ethereum.Value.fromUnsignedBigInt(this.value8));
+    map.set("value9", ethereum.Value.fromUnsignedBigInt(this.value9));
+    map.set("value10", ethereum.Value.fromUnsignedBigInt(this.value10));
     return map;
   }
 }
@@ -408,6 +433,39 @@ export class PoolLogic extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  availableManagerFeeAndTotalFundValue(): PoolLogic__availableManagerFeeAndTotalFundValueResult {
+    let result = super.call(
+      "availableManagerFeeAndTotalFundValue",
+      "availableManagerFeeAndTotalFundValue():(uint256,uint256)",
+      []
+    );
+
+    return new PoolLogic__availableManagerFeeAndTotalFundValueResult(
+      result[0].toBigInt(),
+      result[1].toBigInt()
+    );
+  }
+
+  try_availableManagerFeeAndTotalFundValue(): ethereum.CallResult<
+    PoolLogic__availableManagerFeeAndTotalFundValueResult
+  > {
+    let result = super.tryCall(
+      "availableManagerFeeAndTotalFundValue",
+      "availableManagerFeeAndTotalFundValue():(uint256,uint256)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(
+      new PoolLogic__availableManagerFeeAndTotalFundValueResult(
+        value[0].toBigInt(),
+        value[1].toBigInt()
+      )
+    );
   }
 
   balanceOf(account: Address): BigInt {
@@ -665,7 +723,7 @@ export class PoolLogic extends ethereum.SmartContract {
   getFundSummary(): PoolLogic__getFundSummaryResult {
     let result = super.call(
       "getFundSummary",
-      "getFundSummary():(string,uint256,uint256,address,string,uint256,bool,uint256,uint256)",
+      "getFundSummary():(string,uint256,uint256,address,string,uint256,bool,uint256,uint256,uint256,uint256)",
       []
     );
 
@@ -678,14 +736,16 @@ export class PoolLogic extends ethereum.SmartContract {
       result[5].toBigInt(),
       result[6].toBoolean(),
       result[7].toBigInt(),
-      result[8].toBigInt()
+      result[8].toBigInt(),
+      result[9].toBigInt(),
+      result[10].toBigInt()
     );
   }
 
   try_getFundSummary(): ethereum.CallResult<PoolLogic__getFundSummaryResult> {
     let result = super.tryCall(
       "getFundSummary",
-      "getFundSummary():(string,uint256,uint256,address,string,uint256,bool,uint256,uint256)",
+      "getFundSummary():(string,uint256,uint256,address,string,uint256,bool,uint256,uint256,uint256,uint256)",
       []
     );
     if (result.reverted) {
@@ -702,9 +762,34 @@ export class PoolLogic extends ethereum.SmartContract {
         value[5].toBigInt(),
         value[6].toBoolean(),
         value[7].toBigInt(),
-        value[8].toBigInt()
+        value[8].toBigInt(),
+        value[9].toBigInt(),
+        value[10].toBigInt()
       )
     );
+  }
+
+  getWithdrawSingleMax(_asset: Address): BigInt {
+    let result = super.call(
+      "getWithdrawSingleMax",
+      "getWithdrawSingleMax(address):(uint256)",
+      [ethereum.Value.fromAddress(_asset)]
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_getWithdrawSingleMax(_asset: Address): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "getWithdrawSingleMax",
+      "getWithdrawSingleMax(address):(uint256)",
+      [ethereum.Value.fromAddress(_asset)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
   increaseAllowance(spender: Address, addedValue: BigInt): boolean {
@@ -929,6 +1014,29 @@ export class PoolLogic extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
+  tokenPriceWithoutManagerFee(): BigInt {
+    let result = super.call(
+      "tokenPriceWithoutManagerFee",
+      "tokenPriceWithoutManagerFee():(uint256)",
+      []
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_tokenPriceWithoutManagerFee(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "tokenPriceWithoutManagerFee",
+      "tokenPriceWithoutManagerFee():(uint256)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
   totalSupply(): BigInt {
     let result = super.call("totalSupply", "totalSupply():(uint256)", []);
 
@@ -1113,7 +1221,7 @@ export class DepositCall__Outputs {
     this._call = call;
   }
 
-  get value0(): BigInt {
+  get liquidityMinted(): BigInt {
     return this._call.outputValues[0].value.toBigInt();
   }
 }
@@ -1482,6 +1590,40 @@ export class WithdrawCall__Outputs {
   _call: WithdrawCall;
 
   constructor(call: WithdrawCall) {
+    this._call = call;
+  }
+}
+
+export class WithdrawSingleCall extends ethereum.Call {
+  get inputs(): WithdrawSingleCall__Inputs {
+    return new WithdrawSingleCall__Inputs(this);
+  }
+
+  get outputs(): WithdrawSingleCall__Outputs {
+    return new WithdrawSingleCall__Outputs(this);
+  }
+}
+
+export class WithdrawSingleCall__Inputs {
+  _call: WithdrawSingleCall;
+
+  constructor(call: WithdrawSingleCall) {
+    this._call = call;
+  }
+
+  get _fundTokenAmount(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get _asset(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+}
+
+export class WithdrawSingleCall__Outputs {
+  _call: WithdrawSingleCall;
+
+  constructor(call: WithdrawSingleCall) {
     this._call = call;
   }
 }
