@@ -178,7 +178,7 @@ export function handleWithdrawal(event: WithdrawalEvent): void {
     withdrawnAssets.asset = blockData.asset;
     withdrawnAssets.name = fetchTokenName(blockData.asset);
     withdrawnAssets.amount = tokenAmountWithdrawn;
-    withdrawnAssets.withdrawProcessed = blockData.withdrawProcessed;
+    withdrawnAssets.withdrawProcessed = blockData.externalWithdrawProcessed;
     withdrawnAssets.withdrawal = entity.id;
     withdrawnAssets.save();
 

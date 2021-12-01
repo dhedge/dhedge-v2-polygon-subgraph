@@ -234,6 +234,24 @@ export class Paused__Params {
   }
 }
 
+export class PoolPerformanceAddressSet extends ethereum.Event {
+  get params(): PoolPerformanceAddressSet__Params {
+    return new PoolPerformanceAddressSet__Params(this);
+  }
+}
+
+export class PoolPerformanceAddressSet__Params {
+  _event: PoolPerformanceAddressSet;
+
+  constructor(event: PoolPerformanceAddressSet) {
+    this._event = event;
+  }
+
+  get poolPerformanceAddress(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+}
+
 export class ProxyCreated extends ethereum.Event {
   get params(): ProxyCreated__Params {
     return new ProxyCreated__Params(this);
@@ -413,6 +431,23 @@ export class PoolFactory__getDaoFeeResult {
   }
 }
 
+export class PoolFactory__getExitFeeResult {
+  value0: BigInt;
+  value1: BigInt;
+
+  constructor(value0: BigInt, value1: BigInt) {
+    this.value0 = value0;
+    this.value1 = value1;
+  }
+
+  toMap(): TypedMap<string, ethereum.Value> {
+    let map = new TypedMap<string, ethereum.Value>();
+    map.set("value0", ethereum.Value.fromUnsignedBigInt(this.value0));
+    map.set("value1", ethereum.Value.fromUnsignedBigInt(this.value1));
+    return map;
+  }
+}
+
 export class PoolFactory__getMaximumManagerFeeResult {
   value0: BigInt;
   value1: BigInt;
@@ -568,21 +603,21 @@ export class PoolFactory extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
-  getAssetGuard(extContract: Address): Address {
+  getAssetGuard(extAsset: Address): Address {
     let result = super.call(
       "getAssetGuard",
       "getAssetGuard(address):(address)",
-      [ethereum.Value.fromAddress(extContract)]
+      [ethereum.Value.fromAddress(extAsset)]
     );
 
     return result[0].toAddress();
   }
 
-  try_getAssetGuard(extContract: Address): ethereum.CallResult<Address> {
+  try_getAssetGuard(extAsset: Address): ethereum.CallResult<Address> {
     let result = super.tryCall(
       "getAssetGuard",
       "getAssetGuard(address):(address)",
-      [ethereum.Value.fromAddress(extContract)]
+      [ethereum.Value.fromAddress(extAsset)]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -726,6 +761,33 @@ export class PoolFactory extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  getExitFee(): PoolFactory__getExitFeeResult {
+    let result = super.call("getExitFee", "getExitFee():(uint256,uint256)", []);
+
+    return new PoolFactory__getExitFeeResult(
+      result[0].toBigInt(),
+      result[1].toBigInt()
+    );
+  }
+
+  try_getExitFee(): ethereum.CallResult<PoolFactory__getExitFeeResult> {
+    let result = super.tryCall(
+      "getExitFee",
+      "getExitFee():(uint256,uint256)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(
+      new PoolFactory__getExitFeeResult(
+        value[0].toBigInt(),
+        value[1].toBigInt()
+      )
+    );
   }
 
   getGuard(extContract: Address): Address {
@@ -925,27 +987,6 @@ export class PoolFactory extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
-  isPoolManager(param0: Address): boolean {
-    let result = super.call("isPoolManager", "isPoolManager(address):(bool)", [
-      ethereum.Value.fromAddress(param0)
-    ]);
-
-    return result[0].toBoolean();
-  }
-
-  try_isPoolManager(param0: Address): ethereum.CallResult<boolean> {
-    let result = super.tryCall(
-      "isPoolManager",
-      "isPoolManager(address):(bool)",
-      [ethereum.Value.fromAddress(param0)]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBoolean());
-  }
-
   isValidAsset(asset: Address): boolean {
     let result = super.call("isValidAsset", "isValidAsset(address):(bool)", [
       ethereum.Value.fromAddress(asset)
@@ -1039,6 +1080,29 @@ export class PoolFactory extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
+  poolPerformanceAddress(): Address {
+    let result = super.call(
+      "poolPerformanceAddress",
+      "poolPerformanceAddress():(address)",
+      []
+    );
+
+    return result[0].toAddress();
+  }
+
+  try_poolPerformanceAddress(): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "poolPerformanceAddress",
+      "poolPerformanceAddress():(address)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
   poolStorageVersion(): BigInt {
@@ -1141,7 +1205,7 @@ export class CreateFundCall__Outputs {
     this._call = call;
   }
 
-  get value0(): Address {
+  get fund(): Address {
     return this._call.outputValues[0].value.toAddress();
   }
 }
@@ -1191,6 +1255,32 @@ export class DeployCall__Outputs {
 
   get value0(): Address {
     return this._call.outputValues[0].value.toAddress();
+  }
+}
+
+export class ImplInitializerCall extends ethereum.Call {
+  get inputs(): ImplInitializerCall__Inputs {
+    return new ImplInitializerCall__Inputs(this);
+  }
+
+  get outputs(): ImplInitializerCall__Outputs {
+    return new ImplInitializerCall__Outputs(this);
+  }
+}
+
+export class ImplInitializerCall__Inputs {
+  _call: ImplInitializerCall;
+
+  constructor(call: ImplInitializerCall) {
+    this._call = call;
+  }
+}
+
+export class ImplInitializerCall__Outputs {
+  _call: ImplInitializerCall;
+
+  constructor(call: ImplInitializerCall) {
+    this._call = call;
   }
 }
 
@@ -1416,6 +1506,40 @@ export class SetExitCooldownCall__Outputs {
   }
 }
 
+export class SetExitFeeCall extends ethereum.Call {
+  get inputs(): SetExitFeeCall__Inputs {
+    return new SetExitFeeCall__Inputs(this);
+  }
+
+  get outputs(): SetExitFeeCall__Outputs {
+    return new SetExitFeeCall__Outputs(this);
+  }
+}
+
+export class SetExitFeeCall__Inputs {
+  _call: SetExitFeeCall;
+
+  constructor(call: SetExitFeeCall) {
+    this._call = call;
+  }
+
+  get numerator(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get denominator(): BigInt {
+    return this._call.inputValues[1].value.toBigInt();
+  }
+}
+
+export class SetExitFeeCall__Outputs {
+  _call: SetExitFeeCall;
+
+  constructor(call: SetExitFeeCall) {
+    this._call = call;
+  }
+}
+
 export class SetGovernanceAddressCall extends ethereum.Call {
   get inputs(): SetGovernanceAddressCall__Inputs {
     return new SetGovernanceAddressCall__Inputs(this);
@@ -1600,6 +1724,36 @@ export class SetMaximumSupportedAssetCountCall__Outputs {
   }
 }
 
+export class SetPoolPerformanceAddressCall extends ethereum.Call {
+  get inputs(): SetPoolPerformanceAddressCall__Inputs {
+    return new SetPoolPerformanceAddressCall__Inputs(this);
+  }
+
+  get outputs(): SetPoolPerformanceAddressCall__Outputs {
+    return new SetPoolPerformanceAddressCall__Outputs(this);
+  }
+}
+
+export class SetPoolPerformanceAddressCall__Inputs {
+  _call: SetPoolPerformanceAddressCall;
+
+  constructor(call: SetPoolPerformanceAddressCall) {
+    this._call = call;
+  }
+
+  get _poolPerformanceAddress(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class SetPoolPerformanceAddressCall__Outputs {
+  _call: SetPoolPerformanceAddressCall;
+
+  constructor(call: SetPoolPerformanceAddressCall) {
+    this._call = call;
+  }
+}
+
 export class SetPoolStorageVersionCall extends ethereum.Call {
   get inputs(): SetPoolStorageVersionCall__Inputs {
     return new SetPoolStorageVersionCall__Inputs(this);
@@ -1711,16 +1865,12 @@ export class UpgradePoolBatchCall__Inputs {
     return this._call.inputValues[1].value.toBigInt();
   }
 
-  get sourceVersion(): BigInt {
+  get targetVersion(): BigInt {
     return this._call.inputValues[2].value.toBigInt();
   }
 
-  get targetVersion(): BigInt {
-    return this._call.inputValues[3].value.toBigInt();
-  }
-
-  get data(): Bytes {
-    return this._call.inputValues[4].value.toBytes();
+  get data(): Array<Bytes> {
+    return this._call.inputValues[3].value.toBytesArray();
   }
 }
 
@@ -1728,6 +1878,48 @@ export class UpgradePoolBatchCall__Outputs {
   _call: UpgradePoolBatchCall;
 
   constructor(call: UpgradePoolBatchCall) {
+    this._call = call;
+  }
+}
+
+export class UpgradePoolBatch1Call extends ethereum.Call {
+  get inputs(): UpgradePoolBatch1Call__Inputs {
+    return new UpgradePoolBatch1Call__Inputs(this);
+  }
+
+  get outputs(): UpgradePoolBatch1Call__Outputs {
+    return new UpgradePoolBatch1Call__Outputs(this);
+  }
+}
+
+export class UpgradePoolBatch1Call__Inputs {
+  _call: UpgradePoolBatch1Call;
+
+  constructor(call: UpgradePoolBatch1Call) {
+    this._call = call;
+  }
+
+  get startIndex(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get endIndex(): BigInt {
+    return this._call.inputValues[1].value.toBigInt();
+  }
+
+  get targetVersion(): BigInt {
+    return this._call.inputValues[2].value.toBigInt();
+  }
+
+  get data(): Bytes {
+    return this._call.inputValues[3].value.toBytes();
+  }
+}
+
+export class UpgradePoolBatch1Call__Outputs {
+  _call: UpgradePoolBatch1Call;
+
+  constructor(call: UpgradePoolBatch1Call) {
     this._call = call;
   }
 }

@@ -288,3 +288,39 @@ type Manager @entity {
   managerAddress: Bytes! # address
   fundCreated: [FundCreated!]! @derivedFrom(field: "uniqueManager")
 }
+
+type ExchangeFrom @entity {
+  id: ID!
+  fundAddress: Bytes!
+  sourceAsset: Bytes!
+  sourceAmount: BigInt! # uint256
+  dstAsset: Bytes!
+  time: BigInt!
+}
+
+type ExchangeTo @entity {
+  id: ID!
+  fundAddress: Bytes!
+  sourceAsset: Bytes!
+  dstAsset: Bytes!
+  dstAmount: BigInt! # uint256
+  time: BigInt!
+}
+
+type JoinPool @entity {
+  id: ID!
+  fundAddress: Bytes!
+  poolId: Bytes! # bytes32?
+  assets: [Bytes!]!
+  # maxAmountsIn: [Bytes!]!
+  time: BigInt!
+}
+
+type ExitPool @entity {
+  id: ID!
+  fundAddress: Bytes!
+  poolId: Bytes! # bytes32?
+  assets: [Bytes!]!
+  # minAmountsOut: [Bytes!]!
+  time: BigInt!
+}

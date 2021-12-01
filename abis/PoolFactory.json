@@ -201,6 +201,19 @@
       {
         "indexed": false,
         "internalType": "address",
+        "name": "poolPerformanceAddress",
+        "type": "address"
+      }
+    ],
+    "name": "PoolPerformanceAddressSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
         "name": "proxy",
         "type": "address"
       }
@@ -365,7 +378,7 @@
     "outputs": [
       {
         "internalType": "address",
-        "name": "",
+        "name": "fund",
         "type": "address"
       }
     ],
@@ -451,7 +464,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "extContract",
+        "name": "extAsset",
         "type": "address"
       }
     ],
@@ -491,7 +504,7 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "",
+        "name": "price",
         "type": "uint256"
       }
     ],
@@ -510,7 +523,7 @@
     "outputs": [
       {
         "internalType": "uint16",
-        "name": "",
+        "name": "assetType",
         "type": "uint16"
       }
     ],
@@ -562,6 +575,24 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "getExitFee",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -592,7 +623,7 @@
     "outputs": [
       {
         "internalType": "address[]",
-        "name": "",
+        "name": "investedPools",
         "type": "address[]"
       }
     ],
@@ -630,7 +661,7 @@
     "outputs": [
       {
         "internalType": "address[]",
-        "name": "",
+        "name": "managedPools",
         "type": "address[]"
       }
     ],
@@ -679,6 +710,13 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "implInitializer",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -736,25 +774,6 @@
       }
     ],
     "name": "isPool",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "isPoolManager",
     "outputs": [
       {
         "internalType": "bool",
@@ -838,6 +857,19 @@
         "internalType": "bool",
         "name": "",
         "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "poolPerformanceAddress",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -942,6 +974,24 @@
   {
     "inputs": [
       {
+        "internalType": "uint256",
+        "name": "numerator",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "denominator",
+        "type": "uint256"
+      }
+    ],
+    "name": "setExitFee",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "_governanceAddress",
         "type": "address"
@@ -1025,6 +1075,19 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "_poolPerformanceAddress",
+        "type": "address"
+      }
+    ],
+    "name": "setPoolPerformanceAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "uint256",
         "name": "_poolStorageVersion",
         "type": "uint256"
@@ -1069,7 +1132,30 @@
       },
       {
         "internalType": "uint256",
-        "name": "sourceVersion",
+        "name": "targetVersion",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes[]",
+        "name": "data",
+        "type": "bytes[]"
+      }
+    ],
+    "name": "upgradePoolBatch",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "startIndex",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "endIndex",
         "type": "uint256"
       },
       {
