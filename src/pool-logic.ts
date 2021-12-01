@@ -99,6 +99,7 @@ export function handleManagerFeeMinted(event: ManagerFeeMintedEvent): void {
   entity.daoFee = event.params.daoFee;
   entity.managerFee = event.params.managerFee;
   entity.tokenPriceAtLastFeeMint = event.params.tokenPriceAtLastFeeMint;
+  entity.block = event.block.number.toI32();
   entity.save();
 }
 
