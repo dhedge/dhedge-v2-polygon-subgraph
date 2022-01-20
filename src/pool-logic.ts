@@ -73,6 +73,7 @@ export function handleDeposit(event: DepositEvent): void {
 
   entity.managerName = pool.managerName;
   entity.poolName = pool.name;
+  entity.manager = pool.manager;
   entity.uniqueInvestor = investor.id;
   entity.pool = pool.id;
   entity.fundAddress = event.params.fundAddress;
@@ -84,7 +85,7 @@ export function handleDeposit(event: DepositEvent): void {
   entity.totalInvestorFundTokens = event.params.totalInvestorFundTokens;
   entity.fundValue = event.params.fundValue;
   entity.time = event.params.time;
-  entity.block = event.block.number.toI32();
+  entity.blockNumber = event.block.number.toI32();
   entity.save();
 }
 

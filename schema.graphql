@@ -115,9 +115,10 @@ type Deposit @entity {
   fundValue: BigInt!
   totalSupply: BigDecimal!
   time: BigInt!
-  block: Int!
+  blockNumber: Int!
   poolName: String!
   managerName: String!
+  manager: Bytes
   pool: Pool!
   uniqueInvestor: Investor!
 }
