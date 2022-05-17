@@ -6,9 +6,9 @@ dataSources:
     name: PoolFactory
     network: matic
     source:
-      address: '0xfdc7b8bFe0DD3513Cc669bB8d601Cb83e2F69cB0'
+      address: "0xDd87eCdB10cFF7004276AAbAbd30e7a08F69bb53"
       abi: PoolFactory
-      startBlock: 17343901
+      startBlock: 17364000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -78,7 +78,7 @@ dataSources:
     name: UniswapV2RouterGuard
     network: matic
     source:
-      address: '0x3047511a1b78f63E132E3884c987eA315dd46045'
+      address: "0x3047511a1b78f63E132E3884c987eA315dd46045"
       abi: UniswapV2RouterGuard
       startBlock: 17344397
     mapping:
@@ -111,7 +111,7 @@ dataSources:
     name: SushiMiniChefV2Guard
     network: matic
     source:
-      address: '0x47C444b9d91D1F8ceF52f3170218EF89819d6E1b'
+      address: "0x47C444b9d91D1F8ceF52f3170218EF89819d6E1b"
       abi: SushiMiniChefV2Guard
       startBlock: 17344403
     mapping:
@@ -138,7 +138,7 @@ dataSources:
     name: BalancerV2Guard
     network: matic
     source:
-      address: '0xC6CF4B058c51cf474c5984180e693AF438222363'
+      address: "0xC6CF4B058c51cf474c5984180e693AF438222363"
       abi: BalancerV2Guard
       startBlock: 20551075
     mapping:
