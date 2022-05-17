@@ -28,6 +28,7 @@ type FundCreated @entity {
   managerName: String!
   manager: Bytes!
   time: BigInt!
+  performanceFeeNumerator: BigInt!
   managerFeeNumerator: BigInt!
   managerFeeDenominator: BigInt!
   uniqueManager: Manager!

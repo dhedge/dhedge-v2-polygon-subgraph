@@ -75,6 +75,26 @@ dataSources:
           handler: handleUnpaused
       file: ./src/pool-factory.ts
   - kind: ethereum/contract
+    name: PoolFactoryMoonlight
+    network: matic
+    source:
+      address: "0xDd87eCdB10cFF7004276AAbAbd30e7a08F69bb53"
+      abi: PoolFactoryMoonlight
+      startBlock: 27069574
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - FundCreated
+      abis:
+        - name: PoolFactoryMoonlight
+          file: ./abis/PoolFactoryMoonlight.json
+      eventHandlers:
+        - event: FundCreated(address,bool,string,string,address,uint256,uint256,uint256,uint256)
+          handler: handleFundCreatedMoonlight
+      file: ./src/pool-factory.ts
+  - kind: ethereum/contract
     name: UniswapV2RouterGuard
     network: matic
     source:
