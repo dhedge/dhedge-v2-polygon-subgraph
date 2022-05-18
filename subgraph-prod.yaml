@@ -1,0 +1,234 @@
+specVersion: 0.0.2
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: PoolFactory
+    network: matic
+    source:
+      address: "0xfdc7b8bFe0DD3513Cc669bB8d601Cb83e2F69cB0"
+      abi: PoolFactory
+      startBlock: 17343901
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - DAOAddressSet
+        - DaoFeeSet
+        - ExitCooldownSet
+        - ExitFeeSet
+        - FundCreated
+        - LogUpgrade
+        - MaximumSupportedAssetCountSet
+        - OwnershipTransferred
+        - Paused
+        - ProxyCreated
+        - SetAssetHandler
+        - SetMaximumManagerFee
+        - SetManagerFeeNumeratorChangeDelay
+        - SetMaximumManagerFeeNumeratorChange
+        - SetPoolManagerFee
+        - SetPoolStorageVersion
+        - Unpaused
+      abis:
+        - name: PoolFactory
+          file: ./abis/PoolFactory.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: ERC20NameBytes
+          file: ./abis/ERC20NameBytes.json
+      eventHandlers:
+        - event: DAOAddressSet(address)
+          handler: handleDaoAddressSet
+        - event: DaoFeeSet(uint256,uint256)
+          handler: handleDaoFeeSet
+        - event: ExitCooldownSet(uint256)
+          handler: handleExitCooldownSet
+        - event: ExitFeeSet(uint256,uint256)
+          handler: handleExitFeeSet
+        - event: FundCreated(address,bool,string,string,address,uint256,uint256,uint256)
+          handler: handleFundCreated
+        - event: LogUpgrade(indexed address,indexed address)
+          handler: handleLogUpgrade
+        - event: MaximumSupportedAssetCountSet(uint256)
+          handler: handleMaximumSupportedAssetCountSet
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: Paused(address)
+          handler: handlePaused
+        - event: ProxyCreated(address)
+          handler: handleProxyCreated
+        - event: SetAssetHandler(address)
+          handler: handleSetAssetHandler
+        - event: SetManagerFeeNumeratorChangeDelay(uint256)
+          handler: handleSetManagerFeeNumeratorChangeDelay
+        - event: SetMaximumManagerFee(uint256,uint256)
+          handler: handleSetMaximumManagerFee
+        - event: SetMaximumManagerFeeNumeratorChange(uint256)
+          handler: handleSetMaximumManagerFeeNumeratorChange
+        - event: SetPoolManagerFee(uint256,uint256)
+          handler: handleSetPoolManagerFee
+        - event: SetPoolStorageVersion(uint256)
+          handler: handleSetPoolStorageVersion
+        - event: Unpaused(address)
+          handler: handleUnpaused
+      file: ./src/pool-factory.ts
+  - kind: ethereum/contract
+    name: PoolFactoryMoonlight
+    network: matic
+    source:
+      address: "0xfdc7b8bFe0DD3513Cc669bB8d601Cb83e2F69cB0"
+      abi: PoolFactoryMoonlight
+      startBlock: 27587136
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - FundCreated
+      abis:
+        - name: PoolFactoryMoonlight
+          file: ./abis/PoolFactoryMoonlight.json
+      eventHandlers:
+        - event: FundCreated(address,bool,string,string,address,uint256,uint256,uint256,uint256)
+          handler: handleFundCreatedMoonlight
+      file: ./src/pool-factory.ts
+  - kind: ethereum/contract
+    name: UniswapV2RouterGuard
+    network: matic
+    source:
+      address: "0x3047511a1b78f63E132E3884c987eA315dd46045"
+      abi: UniswapV2RouterGuard
+      startBlock: 17344397
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Exchange
+        - Pool
+        - AddLiquidity
+        - RemoveLiquidity
+      abis:
+        - name: UniswapV2RouterGuard
+          file: ./abis/UniswapV2RouterGuard.json
+        - name: PoolLogic
+          file: ./abis/PoolLogic.json
+        - name: PoolManagerLogic
+          file: ./abis/PoolManagerLogic.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+      eventHandlers:
+        - event: Exchange(address,address,uint256,address,uint256)
+          handler: handleExchange
+        - event: AddLiquidity(address,address,address,address,uint256,uint256,uint256,uint256,uint256)
+          handler: handleAddLiquidity
+        - event: RemoveLiquidity(address,address,address,address,uint256,uint256,uint256,uint256)
+          handler: handleRemoveLiquidity
+      file: ./src/uniswap-v2-router-guard.ts
+  - kind: ethereum/contract
+    name: SushiMiniChefV2Guard
+    network: matic
+    source:
+      address: "0x47C444b9d91D1F8ceF52f3170218EF89819d6E1b"
+      abi: SushiMiniChefV2Guard
+      startBlock: 17344403
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Pool
+        - Stake
+        - Unstake
+        - Claim
+      abis:
+        - name: SushiMiniChefV2Guard
+          file: ./abis/SushiMiniChefV2Guard.json
+      eventHandlers:
+        - event: Stake(address,address,address,uint256,uint256)
+          handler: handleStake
+        - event: Unstake(address,address,address,uint256,uint256)
+          handler: handleUnstake
+        - event: Claim(address,address,uint256)
+          handler: handleClaim
+      file: ./src/sushi-minichef-v2-guard.ts
+  - kind: ethereum/contract
+    name: BalancerV2Guard
+    network: matic
+    source:
+      address: "0xC6CF4B058c51cf474c5984180e693AF438222363"
+      abi: BalancerV2Guard
+      startBlock: 20551075
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Pool
+        - ExchangeFrom
+        - ExchangeTo
+      abis:
+        - name: BalancerV2Guard
+          file: ./abis/BalancerV2Guard.json
+      eventHandlers:
+        - event: ExchangeFrom(address,address,uint256,address,uint256)
+          handler: handleExchangeFrom
+        - event: ExchangeTo(address,address,address,uint256,uint256)
+          handler: handleExchangeTo
+        - event: ExitPool(address,bytes32,address[],uint256[],uint256)
+          handler: handleExitPool
+        - event: JoinPool(address,bytes32,address[],uint256[],uint256)
+          handler: handleJoinPool
+        # - event: OwnershipTransferred(indexed address,indexed address)
+        #   handler: handleOwnershipTransferred
+      file: ./src/balancer-v2-guard.ts
+
+templates:
+  - kind: ethereum/contract
+    name: PoolLogic
+    network: matic
+    source:
+      abi: PoolLogic
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Approval
+        - Deposit
+        - ManagerFeeMinted
+        - PoolManagerLogicSet
+        - PoolPrivacyUpdated
+        - TransactionExecuted
+        - Transfer
+        - Withdrawal
+        - Pool
+      abis:
+        - name: PoolLogic
+          file: ./abis/PoolLogic.json
+        - name: PoolManagerLogic
+          file: ./abis/PoolManagerLogic.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: ERC20NameBytes
+          file: ./abis/ERC20NameBytes.json
+      eventHandlers:
+        - event: Approval(indexed address,indexed address,uint256)
+          handler: handleApproval
+        - event: Deposit(address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,uint256)
+          handler: handleDeposit
+        - event: ManagerFeeMinted(address,address,uint256,uint256,uint256,uint256)
+          handler: handleManagerFeeMinted
+        - event: PoolManagerLogicSet(address,address)
+          handler: handlePoolManagerLogicSet
+        - event: PoolPrivacyUpdated(bool)
+          handler: handlePoolPrivacyUpdated
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: TransactionExecuted(address,address,uint16,uint256)
+          handler: handleTransactionExecuted
+        - event: Withdrawal(address,address,uint256,uint256,uint256,uint256,uint256,(address,uint256,bool)[],uint256)
+          handler: handleWithdrawal
+      file: ./src/pool-logic.ts
