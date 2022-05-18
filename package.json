@@ -2,9 +2,11 @@
   "name": "dhedge-v2-polygon",
   "license": "UNLICENSED",
   "scripts": {
-    "codegen": "graph codegen",
-    "build": "graph build",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ dhedge/dhedge-v2-polygon",
+    "codegen": "graph codegen ./subgraph-prod.yaml",
+    "build-dev": "graph build ./subgraph-dev.yaml",
+    "build-prod": "graph build ./subgraph-prod.yaml",
+    "deploy-dev": "graph deploy ./subgraph-dev.yaml --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ dhedge/dhedge-v2-polygon-dev",
+    "deploy-prod": "graph deploy ./subgraph-prod.yam --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ dhedge/dhedge-v2-polygon",
     "create-local": "graph create --node http://localhost:8020/ dhedge/dhedge-v2-polygon",
     "remove-local": "graph remove --node http://localhost:8020/ dhedge/dhedge-v2-polygon",
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 dhedge/dhedge-v2-polygon"

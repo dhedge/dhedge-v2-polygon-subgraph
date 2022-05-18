@@ -274,6 +274,15 @@ export class FundCreated extends Entity {
     this.set("time", Value.fromBigInt(value));
   }
 
+  get performanceFeeNumerator(): BigInt {
+    let value = this.get("performanceFeeNumerator");
+    return value.toBigInt();
+  }
+
+  set performanceFeeNumerator(value: BigInt) {
+    this.set("performanceFeeNumerator", Value.fromBigInt(value));
+  }
+
   get managerFeeNumerator(): BigInt {
     let value = this.get("managerFeeNumerator");
     return value.toBigInt();
@@ -1403,6 +1412,24 @@ export class Transfer extends Entity {
 
   set value(value: BigInt) {
     this.set("value", Value.fromBigInt(value));
+  }
+
+  get address(): string {
+    let value = this.get("address");
+    return value.toString();
+  }
+
+  set address(value: string) {
+    this.set("address", Value.fromString(value));
+  }
+
+  get block(): i32 {
+    let value = this.get("block");
+    return value.toI32();
+  }
+
+  set block(value: i32) {
+    this.set("block", Value.fromI32(value));
   }
 }
 
