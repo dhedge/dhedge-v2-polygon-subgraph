@@ -1338,13 +1338,13 @@ export class TransactionExecuted extends Entity {
     this.set("time", Value.fromBigInt(value));
   }
 
-  get blockNumber(): BigInt {
+  get blockNumber(): i32 {
     let value = this.get("blockNumber");
-    return value!.toBigInt();
+    return value.toI32();
   }
 
-  set blockNumber(value: BigInt) {
-    this.set("blockNumber", Value.fromBigInt(value));
+  set blockNumber(value: i32) {
+    this.set("blockNumber", Value.fromI32(value));
   }
 
   get poolName(): string {
