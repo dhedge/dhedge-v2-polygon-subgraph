@@ -204,11 +204,13 @@ export function handleWithdrawal(event: WithdrawalEvent): void {
     // asset.save();
   }
 
-  let investorAddress = event.params.investor.toHexString();
-  let investor = Investor.load(investorAddress);
+  // use this address instead of event.params.investor to avoid incorrect address mapping
+  // when using 3rd party contracts like EasySwapper
+  const investorAddress = event.transaction.from;
+  let investor = Investor.load(investorAddress.toHexString());
   if (!investor) {
-    investor = new Investor(investorAddress);
-    investor.investorAddress = event.params.investor;
+    investor = new Investor(investorAddress.toHexString());
+    investor.investorAddress = investorAddress;
   }
   investor.save();
 
@@ -218,7 +220,7 @@ export function handleWithdrawal(event: WithdrawalEvent): void {
   entity.pool = pool.id;
   entity.fundAddress = event.params.fundAddress;
   entity.totalSupply = pool.totalSupply;
-  entity.investor = event.params.investor;
+  entity.investor = investorAddress;
   entity.valueWithdrawn = event.params.valueWithdrawn;
   entity.fundTokensWithdrawn = event.params.fundTokensWithdrawn;
   entity.totalInvestorFundTokens = event.params.totalInvestorFundTokens;
