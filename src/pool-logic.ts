@@ -206,7 +206,7 @@ export function handleWithdrawal(event: WithdrawalEvent): void {
 
   // use this address instead of event.params.investor to avoid incorrect address mapping
   // when using 3rd party contracts like EasySwapper
-  const investorAddress = event.transaction.from;
+  let investorAddress = event.transaction.from;
   let investor = Investor.load(investorAddress.toHexString());
   if (!investor) {
     investor = new Investor(investorAddress.toHexString());
